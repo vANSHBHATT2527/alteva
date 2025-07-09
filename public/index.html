@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALTIVA NATURALS - Men's Health Products</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #eafaf1; /* light green background */
+        }
+
+        /* Modern Navbar/Header */
+        .navbar {
+            background: linear-gradient(90deg, #388e3c 0%, #81c784 100%);
+            padding: 0;
+            box-shadow: 0 2px 8px rgba(56,142,60,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            height: 64px;
+        }
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+            color: #fff;
+            background: linear-gradient(90deg, #43a047 0%, #a5d6a7 100%);
+            padding: 8px 18px;
+            border-radius: 12px;
+            letter-spacing: 1px;
+            box-shadow: 0 1px 8px rgba(67,160,71,0.12);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .logo::before {
+            content: '\1F343'; /* leaf emoji */
+            font-size: 22px;
+        }
+        .search-bar {
+            flex: 1;
+            max-width: 350px;
+            margin: 0 32px;
+            position: relative;
+        }
+        .search-bar input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #a5d6a7;
+            border-radius: 5px;
+            font-size: 15px;
+            background: #f0fdf4;
+        }
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+        .nav-btn {
+            padding: 8px 18px;
+            border: 1px solid #388e3c;
+            background: #eafaf1;
+            color: #388e3c;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        .nav-btn:hover {
+            background: #388e3c;
+            color: #fff;
+        }
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+            font-size: 22px;
+            margin-left: 10px;
+        }
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -10px;
+            background: #43a047;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        @media (max-width: 900px) {
+            .nav-container {
+                flex-direction: column;
+                height: auto;
+                gap: 10px;
+                padding: 10px 10px 0 10px;
+            }
+            .search-bar {
+                margin: 10px 0;
+                max-width: 100%;
+            }
+        }
+        @media (max-width: 600px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 8px;
+                padding: 8px 4px 0 4px;
+            }
+            .logo {
+                font-size: 18px;
+                padding: 6px 10px;
+            }
+            .nav-btn {
+                padding: 7px 10px;
+                font-size: 12px;
+            }
+            .cart-icon {
+                font-size: 18px;
+            }
+        }
+
+        /* Hero Banner */
+        .hero-banner {
+            width: 100%;
+            background: linear-gradient(90deg, #66bb6a 0%, #b2ff59 100%);
+            color: #1b5e20;
+            padding: 60px 20px 40px 20px;
+            text-align: center;
+            margin-bottom: 30px;
+            border-radius: 0 0 32px 32px;
+            box-shadow: 0 4px 24px rgba(102,187,106,0.10);
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 1s;
+        }
+        .hero-banner h1 {
+            font-size: 40px;
+            font-weight: bold;
+            margin-bottom: 18px;
+            letter-spacing: 1px;
+        }
+        .hero-banner p {
+            font-size: 20px;
+            margin-bottom: 28px;
+        }
+        .hero-cta {
+            background: #388e3c;
+            color: #fff;
+            border: none;
+            padding: 14px 36px;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            transition: background 0.3s, color 0.3s;
+        }
+        .hero-cta:hover {
+            background: #81c784;
+            color: #1b5e20;
+        }
+
+        /* Wishlist Icon */
+        .wishlist-btn {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: #eafaf1;
+            border: none;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: #43a047;
+            cursor: pointer;
+            z-index: 3;
+            transition: background 0.2s;
+        }
+        .wishlist-btn.active {
+            color: #fff;
+            background: #43a047;
+        }
+        .wishlist-btn:hover {
+            background: #e0f2f7;
+        }
+
+        /* Page Container */
+        .page-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Men's Health Section */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 32px;
+            color: #2c3e2d;
+            font-weight: 500;
+        }
+
+        .view-all-btn {
+            color: #7a8471;
+            text-decoration: none;
+            font-size: 14px;
+            border-bottom: 1px solid #7a8471;
+        }
+
+        /* Product Grid */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #28a745;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+            z-index: 2;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 250px;
+            background: #f8f9f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-image img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+        }
+
+        .product-info {
+            padding: 20px;
+        }
+
+        .product-rating {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+            font-size: 12px;
+        }
+
+        .stars {
+            color: #ffc107;
+        }
+
+        .rating-text {
+            color: #666;
+        }
+
+        .product-title {
+            font-size: 18px;
+            font-weight: 500;
+            color: #2c3e2d;
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+
+        .product-price {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .current-price {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c3e2d;
+        }
+
+        .original-price {
+            font-size: 16px;
+            color: #999;
+            text-decoration: line-through;
+        }
+
+        .coins-info {
+            font-size: 12px;
+            color: #ff9500;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .buy-btn {
+            width: 100%;
+            background: #7a8471;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: background-color 0.3s ease;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .buy-btn:hover {
+            background: #6a7361;
+        }
+
+        /* View All Link */
+        .view-all-products {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .view-all-link {
+            color: #7a8471;
+            text-decoration: none;
+            font-size: 16px;
+            border-bottom: 2px solid #7a8471;
+            padding-bottom: 2px;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 0;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            background: #7a8471;
+            color: white;
+            padding: 20px;
+            border-radius: 12px 12px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .close {
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            background: none;
+        }
+
+        .close:hover {
+            opacity: 0.7;
+        }
+
+        .modal-body {
+            padding: 30px;
+        }
+
+        /* Login Form */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2c3e2d;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #7a8471;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: #7a8471;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            background: #6a7361;
+        }
+
+        /* Checkout Styles */
+        .checkout-section {
+            margin-bottom: 30px;
+        }
+
+        .checkout-section h3 {
+            color: #2c3e2d;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-info {
+            flex: 1;
+        }
+
+        .item-name {
+            font-weight: 500;
+            color: #2c3e2d;
+            margin-bottom: 5px;
+        }
+
+        .item-price {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0 20px;
+        }
+
+        .qty-btn {
+            background: #7a8471;
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .qty-display {
+            font-weight: bold;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        .total-section {
+            background: #f8f9f5;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .total-row.final {
+            font-weight: bold;
+            font-size: 18px;
+            color: #2c3e2d;
+            border-top: 1px solid #ddd;
+            padding-top: 10px;
+            margin-top: 15px;
+        }
+
+        /* Success Message */
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border: 1px solid #c3e6cb;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .search-bar {
+                margin: 0;
+                max-width: 100%;
+            }
+            
+            .product-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 15px;
+            }
+            
+            .section-title {
+                font-size: 24px;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+            }
+        }
+
+        #myOrdersModal .modal-content { padding: 0; border-radius: 12px; overflow: hidden; }
+        #myOrdersModal .modal-header { background: #7a8471; color: #fff; padding: 18px 28px; border-top-left-radius: 12px; border-top-right-radius: 12px; display: flex; align-items: center; justify-content: space-between; }
+        #myOrdersModal .modal-header h2 { margin: 0; font-size: 22px; font-weight: bold; }
+        #myOrdersModal .close { background: none; border: none; color: #fff; font-size: 28px; cursor: pointer; }
+        #myOrdersModal .modal-body { padding: 24px 28px; max-height: 400px; overflow-y: auto; background: #fff; }
+        #myOrdersModal table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 15px; }
+        #myOrdersModal th, #myOrdersModal td { padding: 10px 8px; text-align: left; }
+        #myOrdersModal th { background: #f5f5f0; color: #2c3e2d; font-weight: bold; border-bottom: 2px solid #e0e0e0; }
+        #myOrdersModal tr:nth-child(even) { background: #f8f9f5; }
+        #myOrdersModal tr:nth-child(odd) { background: #fff; }
+        #myOrdersModal .order-status { display: inline-block; padding: 3px 12px; border-radius: 12px; font-size: 13px; font-weight: bold; }
+        #myOrdersModal .status-pending { background: #fffbe6; color: #b8860b; border: 1px solid #ffe58f; }
+        #myOrdersModal .status-completed { background: #e6ffed; color: #2c3e2d; border: 1px solid #b7eb8f; }
+        #myOrdersModal .status-cancelled { background: #fff1f0; color: #e74c3c; border: 1px solid #ffa39e; }
+        #myOrdersModal .order-items-list { margin: 0; padding-left: 18px; }
+        #myOrdersModal .order-items-list li { margin-bottom: 2px; }
+        #myOrdersModal .order-total { text-align: right; font-weight: bold; }
+        @media (max-width: 700px) { #myOrdersModal .modal-content { max-width: 98vw; } #myOrdersModal .modal-body { padding: 12px 4px; } }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">ALTIVA NATURALS</div>
+            <div class="search-bar">
+                
+            </div>
+            <div class="nav-actions">
+                <a href="#" class="nav-btn" onclick="showMensHealth()">HOME</a>
+                <a href="contact.html" class="nav-btn">CONTACT US</a>
+                <a href="#" class="nav-btn" id="loginNavBtn" onclick="showLogin()">LOGIN</a>
+                <div class="profile-dropdown" id="profileNavBtn" style="display:none; position:relative;">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1144/1144760.png" alt="Profile" style="width:32px;height:32px;border-radius:50%;vertical-align:middle;cursor:pointer;" id="profileImg">
+                    <span id="profileEmail" style="margin-left:8px;vertical-align:middle;font-size:14px;color:#7a8471;"></span>
+                    <div class="dropdown-menu" id="profileDropdownMenu" style="display:none;position:absolute;right:0;top:40px;background:#fff;border:1px solid #ddd;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.08);min-width:150px;z-index:1001;">
+                        <a href="myorders.html" class="dropdown-item" style="display:block;padding:10px 18px;color:#2c3e2d;text-decoration:none;">My Orders</a>
+                        <a href="#" class="dropdown-item" style="display:block;padding:10px 18px;color:#e74c3c;text-decoration:none;" onclick="logoutUser()">Logout</a>
+                    </div>
+                </div>
+                <div class="cart-icon" id="cartIcon">🛒<span class="cart-count" id="cartCount">0</span></div>
+            </div>
+        </div>
+    </nav>
+    <!-- Hero Banner -->
+    <div class="hero-banner">
+        <h1>Welcome to Altiva Naturals</h1>
+        <p>Premium Men's Health Products for Strength, Vitality & Wellness</p>
+        <button class="hero-cta" onclick="window.scrollTo({top: document.getElementById('mensHealthPage').offsetTop-80, behavior: 'smooth'});">Shop Now</button>
+    </div>
+
+    <!-- Men's Health/Home Page -->
+    <div class="page active" id="mensHealthPage">
+        <div class="page-container">
+            <div class="section-header">
+                <h1 class="section-title">Men's Health</h1>
+                <a href="#" class="view-all-btn">View all</a>
+            </div>
+            <div class="product-grid">
+                <!-- Product 1 -->
+                <a href="product.html?name=Himalayan%20Shilajit%20Resin" class="product-card" style="text-decoration:none;color:inherit;display:block;position:relative;">
+                    <div class="product-badge">33% OFF</div>
+                    <div class="product-image">
+                        <div style="width: 180px; height: 200px; background: linear-gradient(45deg, #2c3e2d, #4a5d4b); border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-weight: bold; text-align: center; font-size: 12px;">
+                            <div style="background: rgba(255,255,255,0.2); padding: 8px; border-radius: 5px; margin-bottom: 10px;">ALTIVA</div>
+                            <div>Shilajit</div>
+                            <div style="font-size: 10px; margin-top: 5px;">Himalayan Shilajit Resin</div>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-rating">
+                            <span class="stars">★★★★☆</span>
+                            <span class="rating-text">4.3/5 (4846)</span>
+                        </div>
+                        <h3 class="product-title">Himalayan Shilajit Resin</h3>
+                        <div class="product-price">
+                            <span class="current-price">₹999</span>
+                            <span class="original-price">₹1499</span>
+                        </div>
+                        <button class="buy-btn" onclick="event.preventDefault(); event.stopPropagation(); addToCart('Himalayan Shilajit Resin', 999)">
+                            🛒 BUY NOW
+                        </button>
+                    </div>
+                </a>
+                <!-- Product 2 -->
+                <a href="product.html?name=Shilajit%20Energy%20Mix" class="product-card" style="text-decoration:none;color:inherit;display:block;position:relative;">
+                    <div class="product-badge">9% OFF</div>
+                    <div class="product-image">
+                        <div style="width: 180px; height: 200px; background: linear-gradient(45deg, #8b4513, #a0522d); border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-weight: bold; text-align: center; font-size: 12px;">
+                            <div style="background: rgba(255,255,255,0.2); padding: 8px; border-radius: 5px; margin-bottom: 10px;">ALTIVA</div>
+                            <div>Shilajit Energy Mix</div>
+                            <div style="font-size: 10px; margin-top: 5px;">Premium Blend</div>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="rating-text">4.5/5 (110)</span>
+                        </div>
+                        <h3 class="product-title">Shilajit Energy Mix</h3>
+                        <div class="product-price">
+                            <span class="current-price">₹999</span>
+                            <span class="original-price">₹1099</span>
+                        </div>
+                        <button class="buy-btn" onclick="event.preventDefault(); event.stopPropagation(); addToCart('Shilajit Energy Mix', 999)">
+                            🛒 BUY NOW
+                        </button>
+                    </div>
+                </a>
+                <!-- Product 3 -->
+                <a href="product.html?name=Shilajit%20Energy%20Sips" class="product-card" style="text-decoration:none;color:inherit;display:block;position:relative;">
+                    <div class="product-badge">29% OFF</div>
+                    <div class="product-image">
+                        <div style="width: 180px; height: 200px; background: linear-gradient(45deg, #1a1a1a, #333333); border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-weight: bold; text-align: center; font-size: 12px;">
+                            <div style="background: rgba(255,255,255,0.2); padding: 8px; border-radius: 5px; margin-bottom: 10px;">ALTIVA</div>
+                            <div>Shilajit Energy Sips</div>
+                            <div style="font-size: 10px; margin-top: 5px;">On-the-go Energy</div>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-rating">
+                            <span class="stars">★★★★☆</span>
+                            <span class="rating-text">4.5/5 (53)</span>
+                        </div>
+                        <h3 class="product-title">Shilajit Energy Sips</h3>
+                        <div class="product-price">
+                            <span class="current-price">₹999</span>
+                            <span class="original-price">₹1399</span>
+                        </div>
+                        <button class="buy-btn" onclick="event.preventDefault(); event.stopPropagation(); addToCart('Shilajit Energy Sips', 999)">
+                            🛒 BUY NOW
+                        </button>
+                    </div>
+                </a>
+                <!-- Product 4 -->
+                <a href="product.html?name=Shilajit%20Energy%20Capsules" class="product-card" style="text-decoration:none;color:inherit;display:block;position:relative;">
+                    <div class="product-badge">14% OFF</div>
+                    <div class="product-image">
+                        <div style="width: 180px; height: 200px; background: linear-gradient(45deg, #b8860b, #daa520); border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-weight: bold; text-align: center; font-size: 12px;">
+                            <div style="background: rgba(0,0,0,0.2); padding: 8px; border-radius: 5px; margin-bottom: 10px;">ALTIVA</div>
+                            <div>Instant Energy</div>
+                            <div>Capsules</div>
+                            <div style="font-size: 10px; margin-top: 5px;">Quick Energy Boost</div>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-rating">
+                            <span class="stars">★★★★☆</span>
+                            <span class="rating-text">4.3/5 (23)</span>
+                        </div>
+                        <h3 class="product-title">Shilajit Energy Capsules</h3>
+                        <div class="product-price">
+                            <span class="current-price">₹1199</span>
+                            <span class="original-price">₹1399</span>
+                        </div>
+                        <button class="buy-btn" onclick="event.preventDefault(); event.stopPropagation(); addToCart('Shilajit Energy Capsules', 1199)">
+                            🛒 BUY NOW
+                        </button>
+                    </div>
+                </a>
+            </div>
+            <div class="view-all-products">
+                <a href="#" class="view-all-link">View all Men's Health products</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Login to Altiva Naturals</h2>
+                <button class="close" onclick="closeModal('loginModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <button type="submit" class="submit-btn">Login</button>
+                </form>
+                <p style="text-align: center; margin-top: 20px; color: #666;">
+                    Don't have an account? <a href="signup.html" style="color: #7a8471;">Sign up here</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Order Placed Successfully!</h2>
+                <button class="close" onclick="closeModal('successModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="success-message">
+                    <p><strong>Thank you for your order!</strong></p>
+                    <p>Your order has been placed successfully and will be delivered within 3-5 business days.</p>
+                </div>
+                <p><strong>Order ID:</strong> <span id="orderNumber"></span></p>
+                <p><strong>Total Amount:</strong> <span id="orderTotal"></span></p>
+                <p style="margin-top: 20px; color: #666;">
+                    You will receive an email confirmation shortly with your order details and tracking information.
+                </p>
+                <button class="submit-btn" onclick="closeModal('successModal'); showMensHealth();">
+                    Continue Shopping
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Registration Modal -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Register for Altiva Naturals</h2>
+                <button class="close" onclick="closeModal('registerModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label for="regEmail">Email Address</label>
+                        <input type="email" id="regEmail" name="regEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regPassword">Password</label>
+                        <input type="password" id="regPassword" name="regPassword" required>
+                    </div>
+                    <button type="submit" class="submit-btn">Register</button>
+                </form>
+                <p style="text-align: center; margin-top: 20px; color: #666;">
+                    Already have an account? <a href="#" style="color: #7a8471;" onclick="closeModal('registerModal'); showLogin();">Login here</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- My Orders Modal -->
+    <div id="myOrdersModal" class="modal">
+        <div class="modal-content" style="max-width:700px;">
+            <div class="modal-header">
+                <h2>My Orders</h2>
+                <button class="close" onclick="closeModal('myOrdersModal')">&times;</button>
+            </div>
+            <div class="modal-body" id="myOrdersBody">
+                <div style="text-align:center;color:#888;">Loading your orders...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" style="display:none;position:fixed;top:24px;right:24px;z-index:2000;background:#2c3e2d;color:#fff;padding:16px 28px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12);font-size:16px;min-width:180px;text-align:center;opacity:0;transition:opacity 0.3s;pointer-events:none;">Added to cart!</div>
+
+    <script>
+        // Global cart state
+        let cart = [];
+        let isLoggedIn = false;
+        let userToken = localStorage.getItem('userToken') || null;
+        let userEmail = localStorage.getItem('userEmail') || null;
+
+        // Page navigation functions
+        function showMensHealth() {
+            hideAllPages();
+            document.getElementById('mensHealthPage').classList.add('active');
+        }
+
+        function showCheckout() {
+            hideAllPages();
+            document.getElementById('checkoutPage').classList.add('active');
+            updateCartDisplay();
+        }
+
+        function showContactUs() {
+            hideAllPages();
+            document.getElementById('contactUsPage').classList.add('active');
+        }
+
+        function hideAllPages() {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+        }
+
+        // Modal functions
+        function showLogin() {
+            document.getElementById('loginModal').style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+
+        // Add to cart function
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            if (!toast) return;
+            toast.textContent = message;
+            toast.style.display = 'block';
+            toast.style.opacity = '1';
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => { toast.style.display = 'none'; }, 300);
+            }, 2000);
+        }
+
+        function addToCart(productName, price, img) {
+            // Always get the latest cart from localStorage
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const existingItem = cart.find(item => item.name === productName);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    name: productName,
+                    price: price,
+                    quantity: 1,
+                    img: img || '' // Store image URL
+                });
+            }
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+            showToast(`${productName} added to cart!`);
+            if (typeof updateCartDropdown === 'function') updateCartDropdown();
+        }
+
+        // Update cart count in navbar
+        function updateCartCount() {
+            // Always read cart from localStorage to get the latest state
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cartCount').textContent = totalItems;
+        }
+
+        // Update cart display in checkout
+        function updateCartDisplay() {
+            const cartItemsContainer = document.getElementById('cartItems');
+            const totalSection = document.getElementById('totalSection');
+            
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = '<p style="color: #666; text-align: center; padding: 40px;">Your cart is empty</p>';
+                totalSection.style.display = 'none';
+                return;
+            }
+            
+            totalSection.style.display = 'block';
+            
+            cartItemsContainer.innerHTML = cart.map(item => `
+                <div class="cart-item">
+                    <div class="item-info">
+                        <div class="item-name">${item.name}</div>
+                        <div class="item-price">₹${item.price} each</div>
+                    </div>
+                    <div class="quantity-controls">
+                        <button class="qty-btn" onclick="updateQuantity('${item.name}', -1)">-</button>
+                        <span class="qty-display">${item.quantity}</span>
+                        <button class="qty-btn" onclick="updateQuantity('${item.name}', 1)">+</button>
+                    </div>
+                    <div style="font-weight: bold; color: #2c3e2d;">
+                        ₹${item.price * item.quantity}
+                    </div>
+                </div>
+            `).join('');
+            
+            updateTotals();
+            localStorage.setItem('cart', JSON.stringify(cart));
+        }
+
+        // Update item quantity
+        function updateQuantity(productName, change) {
+            const item = cart.find(item => item.name === productName);
+            if (item) {
+                item.quantity += change;
+                if (item.quantity <= 0) {
+                    cart = cart.filter(cartItem => cartItem.name !== productName);
+                }
+                updateCartCount();
+                updateCartDisplay();
+                localStorage.setItem('cart', JSON.stringify(cart));
+            }
+            updateCartDropdown();
+        }
+
+        // Update totals
+        function updateTotals() {
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const shipping = cart.length > 0 ? 50 : 0;
+            const total = subtotal + shipping;
+            
+            document.getElementById('subtotal').textContent = `₹${subtotal}`;
+            document.getElementById('finalTotal').textContent = `₹${total}`;
+        }
+
+        // Login form submission (API)
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            try {
+                const res = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                const data = await res.json();
+                if (res.ok && data.token) {
+                    userToken = data.token;
+                    userEmail = email;
+                    localStorage.setItem('userToken', userToken);
+                    localStorage.setItem('userEmail', userEmail);
+                    isLoggedIn = true;
+                    closeModal('loginModal');
+                    showProfileNav(userEmail);
+                    showToast('Login successful! You can now place your order.');
+                } else {
+                    showToast(data.error || 'Login failed.');
+                }
+            } catch (err) {
+                showToast('Login failed.');
+            }
+        });
+
+        // Registration form submission (API)
+        document.getElementById('registerForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+            try {
+                const res = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                const data = await res.json();
+                if (res.ok && data.success) {
+                    closeModal('registerModal');
+                    showToast('Registration successful! Please login.');
+                } else {
+                    showToast(data.error || 'Registration failed.');
+                }
+            } catch (err) {
+                showToast('Registration failed.');
+            }
+        });
+
+        // Fetch product data from backend API
+        async function getProductData() {
+            const defaultProducts = [
+                {name: 'Himalayan Shilajit Resin', price: 999, img: '', rating: '4.3/5 (4846)', badge: '33% OFF', original: 1499},
+                {name: 'Shilajit Energy Mix', price: 999, img: '', rating: '4.5/5 (110)', badge: '9% OFF', original: 1099},
+                {name: 'Shilajit Energy Sips', price: 999, img: '', rating: '4.5/5 (53)', badge: '29% OFF', original: 1399},
+                {name: 'Shilajit Energy Capsules', price: 1199, img: '', rating: '4.3/5 (23)', badge: '14% OFF', original: 1399}
+            ];
+            try {
+                const res = await fetch('/api/products');
+                if (!res.ok) throw new Error('API error');
+                const products = await res.json();
+                if (!Array.isArray(products) || products.length !== 4) throw new Error('Invalid data');
+                return products;
+            } catch (e) {
+                return defaultProducts;
+            }
+        }
+        // Render products
+        async function renderProducts() {
+            const products = await getProductData();
+            const grid = document.querySelector('.product-grid');
+            grid.innerHTML = '';
+            const productBoxStyles = [
+                'background: linear-gradient(45deg, #2c3e2d, #4a5d4b);',
+                'background: linear-gradient(45deg, #8b4513, #a0522d);',
+                'background: linear-gradient(45deg, #1a1a1a, #333333);',
+                'background: linear-gradient(45deg, #b8860b, #daa520);'
+            ];
+            const productBoxLabels = [
+                '<div style="background: rgba(255,255,255,0.2); padding: 8px; border-radius: 5px; margin-bottom: 10px;">ALTIVA</div><div>Shilajit</div><div style="font-size: 10px; margin-top: 5px;">Himalayan Shilajit Resin</div>',
+                '<div style="background: rgba(255,255,255,0.2); padding: 8px; border-radius: 5px; margin-bottom: 10px;">ALTIVA</div><div>Shilajit Energy Mix</div><div style="font-size: 10px; margin-top: 5px;">Premium Blend</div>',
+                '<div style="background: rgba(255,255,255,0.2); padding: 8px; border-radius: 5px; margin-bottom: 10px;">ALTIVA</div><div>Shilajit Energy Sips</div><div style="font-size: 10px; margin-top: 5px;">On-the-go Energy</div>',
+                '<div style="background: rgba(0,0,0,0.2); padding: 8px; border-radius: 5px; margin-bottom: 10px;">ALTIVA</div><div>Instant Energy</div><div>Capsules</div><div style="font-size: 10px; margin-top: 5px;">Quick Energy Boost</div>'
+            ];
+            products.forEach((p, i) => {
+                grid.innerHTML += `
+                <a class="product-card" href="product.html?name=${encodeURIComponent(p.name)}" style="text-decoration:none;color:inherit;display:block;position:relative;">
+                    <div class="product-badge">${p.badge || (i === 0 ? '33% OFF' : i === 1 ? '9% OFF' : i === 2 ? '29% OFF' : '14% OFF')}</div>
+                    <div class="product-image">
+                        ${p.img ? `<img src="${p.img}" alt="${p.name}" style="width: 180px; height: 200px; object-fit: contain; border-radius: 10px;">` : `<div style="width: 180px; height: 200px; ${productBoxStyles[i]} border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-weight: bold; text-align: center; font-size: 12px;">${productBoxLabels[i]}</div>`}
+                    </div>
+                    <div class="product-info">
+                        <div class="product-rating">
+                            <span class="stars">${i === 1 ? '★★★★★' : '★★★★☆'}</span>
+                            <span class="rating-text">${p.rating || (i === 0 ? '4.3/5 (4846)' : i === 1 ? '4.5/5 (110)' : i === 2 ? '4.5/5 (53)' : '4.3/5 (23)')}</span>
+                        </div>
+                        <h3 class="product-title">${p.name}</h3>
+                        <div class="product-price">
+                            <span class="current-price">₹${p.price}</span>
+                            <span class="original-price">₹${p.original || (i === 0 ? '1499' : i === 1 ? '1099' : i === 2 ? '1399' : '1399')}</span>
+                        </div>
+                        <button class="buy-btn" onclick="event.preventDefault(); event.stopPropagation(); addToCart('${p.name.replace(/'/g, "\\'")}', ${p.price}, '${p.img ? p.img.replace(/'/g, "\\'") : ''}')">
+                            🛒 BUY NOW
+                        </button>
+                    </div>
+                </a>
+                `;
+            });
+        }
+        // Call renderProducts on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            renderProducts();
+            updateCartDropdown();
+            // Redirect to checkout.html on cart icon click
+            const cartIcon = document.getElementById('cartIcon');
+            if (cartIcon) {
+                cartIcon.addEventListener('click', function(e) {
+                    window.location.href = 'checkout.html';
+                });
+            }
+        });
+
+        // Add registration link to login modal
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginModal = document.getElementById('loginModal');
+            if (loginModal) {
+                const p = loginModal.querySelector('p');
+                if (p) {
+                    p.innerHTML = `Don't have an account? <a href="signup.html" style="color: #7a8471;" onclick="closeModal('loginModal'); showRegister();">Sign up here</a>`;
+                }
+            }
+        });
+
+        function updateCartDropdown() {
+            const cartDropdownList = document.getElementById('cartDropdownList');
+            const cartDropdownTotal = document.getElementById('cartDropdownTotal');
+            let cart = [];
+            try {
+                cart = JSON.parse(localStorage.getItem('cart')) || [];
+            } catch (e) {}
+            if (!cartDropdownList || !cartDropdownTotal) return;
+            if (cart.length === 0) {
+                cartDropdownList.innerHTML = '<div class="cart-dropdown-empty">Your cart is empty</div>';
+                cartDropdownTotal.textContent = '';
+                return;
+            }
+            cartDropdownList.innerHTML = cart.map(item => `
+                <div class="cart-dropdown-item">
+                    <span>${item.name} x${item.quantity}</span>
+                    <span>₹${item.price * item.quantity}</span>
+                </div>
+            `).join('');
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            cartDropdownTotal.textContent = `Total: ₹${total}`;
+        }
+
+        // Call updateCartCount on page load to sync with localStorage
+        updateCartCount();
+
+        function showProfileNav(email) {
+            const loginBtn = document.getElementById('loginNavBtn');
+            const profileBtn = document.getElementById('profileNavBtn');
+            const profileEmail = document.getElementById('profileEmail');
+            if (email) {
+                if (loginBtn) loginBtn.style.display = 'none';
+                if (profileBtn) {
+                    profileBtn.style.display = 'inline-block';
+                    if (profileEmail) profileEmail.textContent = email;
+                }
+            } else {
+                if (loginBtn) loginBtn.style.display = 'inline-block';
+                if (profileBtn) profileBtn.style.display = 'none';
+            }
+        }
+        // Dropdown toggle logic
+        (function() {
+            const profileBtn = document.getElementById('profileNavBtn');
+            const dropdownMenu = document.getElementById('profileDropdownMenu');
+            if (profileBtn && dropdownMenu) {
+                profileBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+                });
+                document.addEventListener('click', function() {
+                    dropdownMenu.style.display = 'none';
+                });
+            }
+        })();
+        // Logout function
+        function logoutUser() {
+            localStorage.removeItem('userToken');
+            localStorage.removeItem('userEmail');
+            showProfileNav(null);
+            showToast('Logged out successfully!');
+        }
+        // Placeholder for My Orders
+        async function showMyOrders() {
+            const token = localStorage.getItem('userToken');
+            if (!token) {
+                showToast('Please login to view your orders.');
+                return;
+            }
+            document.getElementById('myOrdersModal').style.display = 'block';
+            const body = document.getElementById('myOrdersBody');
+            body.innerHTML = '<div style="text-align:center;color:#888;">Loading your orders...</div>';
+            try {
+                const res = await fetch('/api/orders?token=' + encodeURIComponent(token));
+                const orders = await res.json();
+                if (!Array.isArray(orders) || orders.length === 0) {
+                    body.innerHTML = '<div style="text-align:center;color:#888;">No orders found.</div>';
+                    return;
+                }
+                let html = '<table>';
+                html += '<tr><th>Date</th><th>Order ID</th><th>Items</th><th class="order-total">Total</th><th>Status</th></tr>';
+                for (const order of orders) {
+                    const date = order._id ? new Date(parseInt(order._id.substring(0,8), 16) * 1000).toLocaleString() : '';
+                    let itemsHtml = '<ul class="order-items-list">';
+                    if (Array.isArray(order.cart)) {
+                        for (const item of order.cart) {
+                            itemsHtml += `<li>${item.name} <span style=\"color:#888;\">(x${item.quantity})</span></li>`;
+                        }
+                    }
+                    itemsHtml += '</ul>';
+                    let statusClass = 'status-pending';
+                    if (order.status === 'completed') statusClass = 'status-completed';
+                    if (order.status === 'cancelled') statusClass = 'status-cancelled';
+                    html += `<tr>
+                        <td>${date}</td>
+                        <td style="font-size:13px;color:#888;">${order._id}</td>
+                        <td>${itemsHtml}</td>
+                        <td class="order-total">₹${order.total ? order.total.toLocaleString() : '0'}</td>
+                        <td><span class="order-status ${statusClass}">${order.status || 'pending'}</span></td>
+                    </tr>`;
+                }
+                html += '</table>';
+                body.innerHTML = html;
+            } catch (e) {
+                body.innerHTML = '<div style="color:#e74c3c;text-align:center;">Failed to load orders.</div>';
+            }
+        }
+        // On page load, check login state
+        (function() {
+            const userEmail = localStorage.getItem('userEmail');
+            const userToken = localStorage.getItem('userToken');
+            if (userToken && userEmail) {
+                showProfileNav(userEmail);
+            } else {
+                showProfileNav(null);
+            }
+        })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Altiva Naturals</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #eafaf1;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 400px;
+            margin: 60px auto;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 2px 16px rgba(56,142,60,0.10);
+            padding: 32px 24px;
+        }
+        h1 {
+            text-align: center;
+            color: #388e3c;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #388e3c;
+            font-weight: 500;
+        }
+        input[type="email"], input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        .submit-btn {
+            width: 100%;
+            background: #388e3c;
+            color: #fff;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .submit-btn:hover {
+            background: #81c784;
+            color: #1b5e20;
+        }
+        .message {
+            margin-top: 18px;
+            text-align: center;
+            font-size: 15px;
+        }
+        .link {
+            display: block;
+            text-align: center;
+            margin-top: 18px;
+            color: #388e3c;
+            text-decoration: none;
+        }
+        .link:hover {
+            color: #1b5e20;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Sign Up</h1>
+        <form id="signupForm">
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit" class="submit-btn">Register</button>
+        </form>
+        <div class="message" id="message"></div>
+        <a href="login.html" class="link">Already have an account? Login here</a>
+    </div>
+    <script>
+        document.getElementById('signupForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = '';
+            try {
+                const res = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                const data = await res.json();
+                if (res.ok && data.success) {
+                    messageDiv.style.color = 'green';
+                    messageDiv.textContent = 'Registration successful! You can now login.';
+                } else {
+                    messageDiv.style.color = 'red';
+                    messageDiv.textContent = data.error || 'Registration failed.';
+                }
+            } catch (err) {
+                messageDiv.style.color = 'red';
+                messageDiv.textContent = 'Registration failed.';
+            }
+        });
+    </script>
+</body>
+</html> 

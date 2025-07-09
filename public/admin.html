@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Orders - Altiva Naturals</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #eafaf1; margin: 0; padding: 0; }
+        .navbar { background: linear-gradient(90deg, #388e3c 0%, #81c784 100%); box-shadow: 0 2px 8px rgba(56,142,60,0.08); position: sticky; top: 0; z-index: 100; }
+        .nav-container { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 64px; }
+        .logo { font-size: 22px; font-weight: bold; color: #fff; background: linear-gradient(90deg, #43a047 0%, #a5d6a7 100%); padding: 8px 18px; border-radius: 12px; letter-spacing: 1px; box-shadow: 0 1px 8px rgba(67,160,71,0.12); display: flex; align-items: center; gap: 8px; }
+        .logo::before { content: '\1F343'; font-size: 22px; }
+        .container { max-width: 1200px; margin: 40px auto; background: #fff; border-radius: 16px; box-shadow: 0 2px 16px rgba(56,142,60,0.10); padding: 32px 24px; }
+        h1 { color: #388e3c; margin-bottom: 24px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 24px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; font-size: 14px; }
+        th { background: #eafaf1; color: #388e3c; }
+        tr:nth-child(even) { background: #f0fdf4; }
+        .cart-list { font-size: 13px; color: #444; }
+        .status-pending { color: #43a047; font-weight: bold; }
+        .status-completed { color: #1b5e20; font-weight: bold; }
+        .status-cancelled { color: #e74c3c; font-weight: bold; }
+        .login-form { max-width: 350px; margin: 40px auto 0 auto; background: #f0fdf4; border-radius: 12px; padding: 28px 24px; box-shadow: 0 2px 8px rgba(56,142,60,0.07); }
+        .login-form label { display: block; margin-bottom: 6px; color: #388e3c; font-weight: bold; }
+        .login-form input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px; margin-bottom: 16px; }
+        .login-form button { width: 100%; background: #388e3c; color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; }
+        .login-form button:hover { background: #81c784; color: #1b5e20; }
+        .error-msg { color: #e74c3c; margin-bottom: 12px; text-align: center; }
+        @media (max-width: 900px) { .container { padding: 8px; } table, th, td { font-size: 12px; } }
+        #ordersTable table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 15px; }
+        #ordersTable th, #ordersTable td { padding: 10px 8px; text-align: left; vertical-align: top; min-width: 90px; word-break: break-word; }
+        #ordersTable th { background: #f5f5f0; color: #2c3e2d; font-weight: bold; border-bottom: 2px solid #e0e0e0; }
+        #ordersTable tr:nth-child(even) { background: #f8f9f5; }
+        #ordersTable tr:nth-child(odd) { background: #fff; }
+        #ordersTable .order-status { display: inline-block; padding: 3px 12px; border-radius: 12px; font-size: 13px; font-weight: bold; }
+        #ordersTable .status-pending { background: #fffbe6; color: #b8860b; border: 1px solid #ffe58f; }
+        #ordersTable .status-completed { background: #e6ffed; color: #2c3e2d; border: 1px solid #b7eb8f; }
+        #ordersTable .status-cancelled { background: #fff1f0; color: #e74c3c; border: 1px solid #ffa39e; }
+        #ordersTable .order-items-list { margin: 0; padding-left: 18px; }
+        #ordersTable .order-items-list li { margin-bottom: 2px; }
+        #ordersTable .order-total { text-align: right; font-weight: bold; min-width: 80px; }
+        #ordersTable td, #ordersTable th { white-space: pre-line; }
+        #ordersTable { overflow-x: auto; }
+        @media (max-width: 1200px) { #ordersTable table { font-size: 13px; } #ordersTable th, #ordersTable td { min-width: 80px; } }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">ALTIVA NATURALS</div>
+            <div class="nav-actions">
+                <a href="index.html" class="nav-btn">HOME</a>
+                <a href="admin.html" class="nav-btn">ADMIN</a>
+            </div>
+            </div>
+    </nav>
+    <div class="container">
+        <div class="admin-tabs">
+            <button class="tab-btn active" id="tabProductsBtn" onclick="showTab('products')">Products</button>
+            <button class="tab-btn" id="tabOrdersBtn" onclick="showTab('orders')">Orders</button>
+        </div>
+        <div id="adminLoginSection">
+            <form class="login-form" id="adminLoginForm">
+                <div class="error-msg" id="loginError"></div>
+                <label for="adminEmail">Admin Email</label>
+                <input type="email" id="adminEmail" required autocomplete="username">
+                <label for="adminPassword">Password</label>
+                <input type="password" id="adminPassword" required autocomplete="current-password">
+                <button type="submit">Login as Admin</button>
+            </form>
+        </div>
+        <div id="productsSection" style="display:none;">
+            <h1>Product Management</h1>
+            <div id="productsTable"></div>
+            <div class="product-form-container">
+                <h3 id="productFormTitle">Add New Product</h3>
+                <form id="productForm" enctype="multipart/form-data">
+                    <input type="hidden" id="productId">
+                    <label>Name <input type="text" id="productName" required></label>
+                    <label>Price <input type="number" id="productPrice" required></label>
+                    <label>Original Price <input type="number" id="productOriginal"></label>
+                    <label>Badge <input type="text" id="productBadge"></label>
+                    <label>Rating <input type="text" id="productRating"></label>
+                    <label>Main Image <input type="file" id="mainImgFile" accept="image/*"></label>
+                    <div id="mainImgPreview" style="margin-bottom:12px;"></div>
+                    <label>Product Page Images <input type="file" id="productImgsFile" accept="image/*" multiple></label>
+                    <div id="productImgsPreview" style="margin-bottom:12px;display:flex;gap:8px;"></div>
+                    <label>Description <textarea id="productDescription" required></textarea></label>
+                    <button type="submit" id="productFormSubmit">Add Product</button>
+                    <button type="button" id="productFormCancel" style="display:none;">Cancel</button>
+                </form>
+            </div>
+        </div>
+        <div id="ordersSection" style="display:none;">
+            <h1>All Orders (Admin)</h1>
+            <div id="ordersTable"></div>
+        </div>
+    </div>
+    <style>
+    .admin-tabs { display: flex; gap: 12px; margin-bottom: 24px; }
+    .tab-btn { background: #eafaf1; color: #388e3c; border: none; padding: 12px 32px; border-radius: 8px 8px 0 0; font-size: 17px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 8px rgba(56,142,60,0.07); transition: background 0.2s, color 0.2s; }
+    .tab-btn.active, .tab-btn:focus { background: #388e3c; color: #fff; }
+    .product-form-container { background: #f0fdf4; border-radius: 12px; padding: 18px 18px 8px 18px; margin-top: 32px; box-shadow: 0 2px 8px rgba(56,142,60,0.07); max-width: 500px; }
+    .product-form-container label { display: block; margin-bottom: 8px; color: #388e3c; font-weight: bold; }
+    .product-form-container input, .product-form-container textarea { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px; margin-bottom: 12px; }
+    .product-form-container button { background: #388e3c; color: #fff; border: none; padding: 10px 18px; border-radius: 8px; font-weight: bold; font-size: 15px; cursor: pointer; margin-right: 8px; }
+    .product-form-container button:hover { background: #81c784; color: #1b5e20; }
+    .product-action-btn { background: #eafaf1; color: #388e3c; border: none; padding: 6px 14px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-right: 6px; }
+    .product-action-btn.edit { background: #a5d6a7; color: #1b5e20; }
+    .product-action-btn.delete { background: #fff1f0; color: #e74c3c; }
+    .product-action-btn:hover { opacity: 0.85; }
+    /* --- Modern nav-btn style from index.html --- */
+    .nav-btn {
+        padding: 8px 18px;
+        border: 1px solid #388e3c;
+        background: #eafaf1;
+        color: #388e3c;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px;
+        text-transform: uppercase;
+        text-decoration: none;
+        transition: all 0.3s;
+        font-weight: 500;
+        margin-left: 8px;
+    }
+    .nav-btn:hover {
+        background: #388e3c;
+        color: #fff;
+    }
+    </style>
+    <script>
+    let adminToken = '';
+    let refreshInterval = null;
+    let products = [];
+    let uploadedMainImgUrl = '';
+    let uploadedProductImgUrls = [];
+
+    function showTab(tab) {
+        document.getElementById('tabProductsBtn').classList.remove('active');
+        document.getElementById('tabOrdersBtn').classList.remove('active');
+        document.getElementById('productsSection').style.display = 'none';
+        document.getElementById('ordersSection').style.display = 'none';
+        if (tab === 'products') {
+            document.getElementById('tabProductsBtn').classList.add('active');
+            document.getElementById('productsSection').style.display = 'block';
+        } else {
+            document.getElementById('tabOrdersBtn').classList.add('active');
+            document.getElementById('ordersSection').style.display = 'block';
+        }
+    }
+
+    document.getElementById('tabProductsBtn').onclick = function() { showTab('products'); };
+    document.getElementById('tabOrdersBtn').onclick = function() { showTab('orders'); };
+
+    document.getElementById('adminLoginForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        document.getElementById('loginError').textContent = '';
+        const email = document.getElementById('adminEmail').value.trim();
+        const password = document.getElementById('adminPassword').value;
+        try {
+            const res = await fetch('/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+            const data = await res.json();
+            if (res.ok && data.token) {
+                adminToken = data.token;
+                document.getElementById('adminLoginSection').style.display = 'none';
+                showTab('products');
+                fetchProducts();
+                fetchOrders();
+                if (refreshInterval) clearInterval(refreshInterval);
+                refreshInterval = setInterval(fetchOrders, 10000);
+            } else {
+                document.getElementById('loginError').textContent = data.error || 'Login failed.';
+            }
+        } catch (err) {
+            document.getElementById('loginError').textContent = 'Login failed.';
+        }
+    });
+
+    // --- Product Management ---
+    async function fetchProducts() {
+        const res = await fetch('/api/products');
+        products = await res.json();
+        renderProductsTable();
+    }
+    function renderProductsTable() {
+        let html = `<table><tr><th>#</th><th>Image</th><th>Name</th><th>Price</th><th>Original</th><th>Badge</th><th>Rating</th><th>Description</th><th>Actions</th></tr>`;
+        products.forEach((p, i) => {
+            html += `<tr><td>${i+1}</td><td>${p.img ? `<img src='${p.img}' style='width:48px;height:48px;object-fit:cover;border-radius:6px;'>` : ''}</td><td>${p.name}</td><td>₹${p.price}</td><td>₹${p.original||''}</td><td>${p.badge||''}</td><td>${p.rating||''}</td><td style='max-width:220px;'>${p.description||''}</td><td><button class='product-action-btn edit' onclick='editProduct("${p._id}")'>Edit</button><button class='product-action-btn delete' onclick='deleteProduct("${p._id}")'>Delete</button></td></tr>`;
+        });
+        html += '</table>';
+        document.getElementById('productsTable').innerHTML = html;
+    }
+    document.getElementById('productForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const id = document.getElementById('productId').value;
+        const product = {
+            name: document.getElementById('productName').value,
+            price: Number(document.getElementById('productPrice').value),
+            original: Number(document.getElementById('productOriginal').value) || '',
+            badge: document.getElementById('productBadge').value,
+            rating: document.getElementById('productRating').value,
+            img: uploadedMainImgUrl,
+            images: [uploadedMainImgUrl, ...uploadedProductImgUrls.filter(url => url !== uploadedMainImgUrl)],
+            description: document.getElementById('productDescription').value
+        };
+        if (id === '') {
+            // Add
+            const res = await fetch('/api/products/add', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token: adminToken, product })
+            });
+            if (res.ok) fetchProducts();
+        } else {
+            // Edit
+            const res = await fetch('/api/products/' + id, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token: adminToken, product })
+            });
+            if (res.ok) fetchProducts();
+        }
+        this.reset();
+        document.getElementById('productId').value = '';
+        document.getElementById('productFormTitle').textContent = 'Add New Product';
+        document.getElementById('productFormSubmit').textContent = 'Add Product';
+        document.getElementById('productFormCancel').style.display = 'none';
+    });
+    document.getElementById('mainImgFile').addEventListener('change', async function() {
+        const file = this.files[0];
+        const preview = document.getElementById('mainImgPreview');
+        if (file) {
+            // Show local preview
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.innerHTML = `<img src='${e.target.result}' style='max-width:120px;max-height:120px;border-radius:8px;'>`;
+            };
+            reader.readAsDataURL(file);
+            // Upload to server
+            const formData = new FormData();
+            formData.append('image', file);
+            const res = await fetch('/api/upload', { method: 'POST', body: formData });
+            if (res.ok) {
+                const data = await res.json();
+                uploadedMainImgUrl = data.url;
+            } else {
+                uploadedMainImgUrl = '';
+                alert('Main image upload failed');
+            }
+        } else {
+            preview.innerHTML = '';
+            uploadedMainImgUrl = '';
+        }
+    });
+    document.getElementById('productImgsFile').addEventListener('change', async function() {
+        const files = Array.from(this.files);
+        const preview = document.getElementById('productImgsPreview');
+        preview.innerHTML = '';
+        uploadedProductImgUrls = [];
+        for (const file of files) {
+            // Show local preview
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const imgEl = document.createElement('img');
+                imgEl.src = e.target.result;
+                imgEl.style = 'max-width:70px;max-height:70px;border-radius:8px;';
+                preview.appendChild(imgEl);
+            };
+            reader.readAsDataURL(file);
+            // Upload to server
+            const formData = new FormData();
+            formData.append('image', file);
+            const res = await fetch('/api/upload', { method: 'POST', body: formData });
+            if (res.ok) {
+                const data = await res.json();
+                uploadedProductImgUrls.push(data.url);
+            } else {
+                alert('One of the product page images failed to upload');
+            }
+        }
+    });
+    window.editProduct = function(id) {
+        const p = products.find(prod => prod._id === id);
+        document.getElementById('productId').value = p._id;
+        document.getElementById('productName').value = p.name;
+        document.getElementById('productPrice').value = p.price;
+        document.getElementById('productOriginal').value = p.original || '';
+        document.getElementById('productBadge').value = p.badge || '';
+        document.getElementById('productRating').value = p.rating || '';
+        uploadedMainImgUrl = p.img || '';
+        uploadedProductImgUrls = Array.isArray(p.images) ? p.images.filter(url => url !== uploadedMainImgUrl) : [];
+        document.getElementById('mainImgPreview').innerHTML = uploadedMainImgUrl ? `<img src='${uploadedMainImgUrl}' style='max-width:120px;max-height:120px;border-radius:8px;'>` : '';
+        document.getElementById('mainImgFile').value = '';
+        // Show previews for product page images
+        const imgsPreview = document.getElementById('productImgsPreview');
+        imgsPreview.innerHTML = '';
+        uploadedProductImgUrls.forEach(url => {
+            const imgEl = document.createElement('img');
+            imgEl.src = url;
+            imgEl.style = 'max-width:70px;max-height:70px;border-radius:8px;';
+            imgsPreview.appendChild(imgEl);
+        });
+        document.getElementById('productImgsFile').value = '';
+        document.getElementById('productDescription').value = p.description || '';
+        document.getElementById('productFormTitle').textContent = 'Edit Product';
+        document.getElementById('productFormSubmit').textContent = 'Update Product';
+        document.getElementById('productFormCancel').style.display = 'inline-block';
+    };
+    window.deleteProduct = async function(id) {
+        if (!confirm('Delete this product?')) return;
+        const res = await fetch('/api/products/' + id, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token: adminToken })
+        });
+        if (res.ok) fetchProducts();
+    };
+    document.getElementById('productFormCancel').onclick = function() {
+        document.getElementById('productForm').reset();
+        document.getElementById('productId').value = '';
+        document.getElementById('mainImgPreview').innerHTML = '';
+        document.getElementById('productImgsPreview').innerHTML = '';
+        uploadedMainImgUrl = '';
+        uploadedProductImgUrls = [];
+        document.getElementById('productFormTitle').textContent = 'Add New Product';
+        document.getElementById('productFormSubmit').textContent = 'Add Product';
+        this.style.display = 'none';
+    };
+
+    // --- Order Management ---
+    async function fetchOrders() {
+        const res = await fetch('/api/orders?token=' + encodeURIComponent(adminToken));
+        const orders = await res.json();
+        if (!Array.isArray(orders)) {
+            document.getElementById('ordersTable').innerHTML = '<div style="color:#e74c3c;">Failed to fetch orders or not an admin.</div>';
+            return;
+        }
+        renderOrdersTable(orders);
+    }
+    function renderOrdersTable(orders) {
+        let html = `<div style="overflow-x:auto;"><button onclick="fetchOrders()" style="margin-bottom:12px;padding:6px 18px;border-radius:4px;border:none;background:#7a8471;color:#fff;font-weight:bold;cursor:pointer;">Refresh Orders</button>
+            <table><tr><th>Date</th><th>User</th><th>Phone</th><th>Email</th><th>Name</th><th>Address</th><th>Pincode</th><th>City</th><th>State</th><th>Payment</th><th>UPI</th><th>Cart</th><th class="order-total">Total</th><th>Status</th><th>Update Status</th></tr>`;
+        for (const order of orders) {
+            const date = order._id ? new Date(parseInt(order._id.substring(0,8), 16) * 1000).toLocaleString() : '';
+            let itemsHtml = '<ul class="order-items-list">';
+            if (Array.isArray(order.cart)) {
+                for (const item of order.cart) {
+                    itemsHtml += `<li>${item.name} <span style=\"color:#888;\">(x${item.quantity})</span></li>`;
+                }
+            }
+            itemsHtml += '</ul>';
+            let statusClass = 'status-pending';
+            if (order.status === 'completed') statusClass = 'status-completed';
+            if (order.status === 'cancelled') statusClass = 'status-cancelled';
+            html += `<tr>
+                <td>${date}</td>
+                <td>${order.user || ''}</td>
+                <td>${order.phone || ''}</td>
+                <td>${order.email || ''}</td>
+                <td>${order.name || ''}</td>
+                <td>${order.address || ''}</td>
+                <td>${order.pincode || ''}</td>
+                <td>${order.city || ''}</td>
+                <td>${order.state || ''}</td>
+                <td>${order.payment || ''}</td>
+                <td>${order.upi || ''}</td>
+                <td>${itemsHtml}</td>
+                <td class="order-total">₹${typeof order.total === 'number' && order.total > 0 ? order.total.toLocaleString() : '0'}</td>
+                <td><span class="order-status ${statusClass}">${order.status || 'pending'}</span></td>
+                <td>
+                    <select onchange="updateOrderStatus('${order._id}', this.value)" value="${order.status}">
+                        <option value="pending" ${order.status==='pending'?'selected':''}>Pending</option>
+                        <option value="completed" ${order.status==='completed'?'selected':''}>Completed</option>
+                        <option value="cancelled" ${order.status==='cancelled'?'selected':''}>Cancelled</option>
+                    </select>
+                </td>
+            </tr>`;
+        }
+        html += '</table></div>';
+        document.getElementById('ordersTable').innerHTML = html;
+    }
+    window.updateOrderStatus = async function(orderId, status) {
+        const res = await fetch('/api/orders/' + orderId, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token: adminToken, status })
+        });
+        if (res.ok) fetchOrders();
+    };
+    // Show login on load
+    showTab('products');
+    </script>
+</body>
+</html> 

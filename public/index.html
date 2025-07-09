@@ -1071,7 +1071,7 @@
                 const res = await fetch('/api/products');
                 if (!res.ok) throw new Error('API error');
                 const products = await res.json();
-                if (!Array.isArray(products) || products.length !== 4) throw new Error('Invalid data');
+                if (!Array.isArray(products)) throw new Error('Invalid data');
                 return products;
             } catch (e) {
                 return defaultProducts;

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Orders - Altiva Naturals</title>
+    <title>Admin Orders - Alteva</title>
     <style>
         body { font-family: Arial, sans-serif; background: #eafaf1; margin: 0; padding: 0; }
         .navbar { background: linear-gradient(90deg, #388e3c 0%, #81c784 100%); box-shadow: 0 2px 8px rgba(56,142,60,0.08); position: sticky; top: 0; z-index: 100; }
@@ -47,7 +47,7 @@
 <body>
     <nav class="navbar">
         <div class="nav-container">
-            <div class="logo">ALTIVA NATURALS</div>
+            <div class="logo">Alteva</div>
             <div class="nav-actions">
                 <a href="index.html" class="nav-btn">HOME</a>
                 <a href="admin.html" class="nav-btn">ADMIN</a>
@@ -58,6 +58,7 @@
         <div class="admin-tabs">
             <button class="tab-btn active" id="tabProductsBtn" onclick="showTab('products')">Products</button>
             <button class="tab-btn" id="tabOrdersBtn" onclick="showTab('orders')">Orders</button>
+            <button class="tab-btn" id="tabOffersBtn" onclick="showTab('offers')">Offers</button>
         </div>
         <div id="adminLoginSection">
             <form class="login-form" id="adminLoginForm">
@@ -94,6 +95,24 @@
         <div id="ordersSection" style="display:none;">
             <h1>All Orders (Admin)</h1>
             <div id="ordersTable"></div>
+        </div>
+        <div id="offersSection" style="display:none;">
+            <h1>Hero Offers Management</h1>
+            <div id="offersTable"></div>
+            <div class="product-form-container">
+                <h3 id="offerFormTitle">Add New Offer</h3>
+                <form id="offerForm" enctype="multipart/form-data">
+                    <input type="hidden" id="offerId">
+                    <label>Title <input type="text" id="offerTitle" required></label>
+                    <label>Subtitle <input type="text" id="offerSubtitle"></label>
+                    <label>Image <input type="file" id="offerImgFile" accept="image/*"></label>
+                    <div id="offerImgPreview" style="margin-bottom:12px;"></div>
+                    <label>Link (optional) <input type="text" id="offerLink"></label>
+                    <label>Active <input type="checkbox" id="offerActive" checked></label>
+                    <button type="submit" id="offerFormSubmit">Add Offer</button>
+                    <button type="button" id="offerFormCancel" style="display:none;">Cancel</button>
+                </form>
+            </div>
         </div>
     </div>
     <style>
@@ -135,23 +154,32 @@
     let products = [];
     let uploadedMainImgUrl = '';
     let uploadedProductImgUrls = [];
+    let offers = [];
+    let uploadedOfferImgUrl = '';
 
     function showTab(tab) {
         document.getElementById('tabProductsBtn').classList.remove('active');
         document.getElementById('tabOrdersBtn').classList.remove('active');
+        document.getElementById('tabOffersBtn').classList.remove('active');
         document.getElementById('productsSection').style.display = 'none';
         document.getElementById('ordersSection').style.display = 'none';
+        document.getElementById('offersSection').style.display = 'none';
         if (tab === 'products') {
             document.getElementById('tabProductsBtn').classList.add('active');
             document.getElementById('productsSection').style.display = 'block';
-        } else {
+        } else if (tab === 'orders') {
             document.getElementById('tabOrdersBtn').classList.add('active');
             document.getElementById('ordersSection').style.display = 'block';
+        } else if (tab === 'offers') {
+            document.getElementById('tabOffersBtn').classList.add('active');
+            document.getElementById('offersSection').style.display = 'block';
+            fetchOffers();
         }
     }
 
     document.getElementById('tabProductsBtn').onclick = function() { showTab('products'); };
     document.getElementById('tabOrdersBtn').onclick = function() { showTab('orders'); };
+    document.getElementById('tabOffersBtn').onclick = function() { showTab('offers'); };
 
     document.getElementById('adminLoginForm').addEventListener('submit', async function(e) {
         e.preventDefault();
@@ -392,6 +420,115 @@
         });
         if (res.ok) fetchOrders();
     };
+
+    // --- Offer Management ---
+    async function fetchOffers() {
+        const res = await fetch('/api/offers');
+        offers = await res.json();
+        renderOffersTable();
+    }
+    function renderOffersTable() {
+        let html = `<table><tr><th>#</th><th>Image</th><th>Title</th><th>Subtitle</th><th>Link</th><th>Active</th><th>Actions</th></tr>`;
+        offers.forEach((o, i) => {
+            html += `<tr><td>${i+1}</td><td>${o.image ? `<img src='${o.image}' style='width:48px;height:48px;object-fit:cover;border-radius:6px;'>` : ''}</td><td>${o.title||''}</td><td>${o.subtitle||''}</td><td>${o.link||''}</td><td>${o.active ? 'Yes' : 'No'}</td><td><button class='product-action-btn edit' onclick='editOffer("${o._id}")'>Edit</button><button class='product-action-btn delete' onclick='deleteOffer("${o._id}")'>Delete</button></td></tr>`;
+        });
+        html += '</table>';
+        document.getElementById('offersTable').innerHTML = html;
+    }
+    document.getElementById('offerForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const id = document.getElementById('offerId').value;
+        const offer = {
+            title: document.getElementById('offerTitle').value,
+            subtitle: document.getElementById('offerSubtitle').value,
+            image: uploadedOfferImgUrl,
+            link: document.getElementById('offerLink').value,
+            active: document.getElementById('offerActive').checked
+        };
+        if (id === '') {
+            // Add
+            const res = await fetch('/api/offers/add', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token: adminToken, offer })
+            });
+            if (res.ok) fetchOffers();
+        } else {
+            // Edit
+            const res = await fetch('/api/offers/' + id, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token: adminToken, offer })
+            });
+            if (res.ok) fetchOffers();
+        }
+        this.reset();
+        document.getElementById('offerId').value = '';
+        document.getElementById('offerFormTitle').textContent = 'Add New Offer';
+        document.getElementById('offerFormSubmit').textContent = 'Add Offer';
+        document.getElementById('offerFormCancel').style.display = 'none';
+        document.getElementById('offerImgPreview').innerHTML = '';
+        uploadedOfferImgUrl = '';
+    });
+    document.getElementById('offerImgFile').addEventListener('change', async function() {
+        const file = this.files[0];
+        const preview = document.getElementById('offerImgPreview');
+        if (file) {
+            // Show local preview
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.innerHTML = `<img src='${e.target.result}' style='max-width:120px;max-height:120px;border-radius:8px;'>`;
+            };
+            reader.readAsDataURL(file);
+            // Upload to server
+            const formData = new FormData();
+            formData.append('image', file);
+            const res = await fetch('/api/upload', { method: 'POST', body: formData });
+            if (res.ok) {
+                const data = await res.json();
+                uploadedOfferImgUrl = data.url;
+            } else {
+                uploadedOfferImgUrl = '';
+                alert('Offer image upload failed');
+            }
+        } else {
+            preview.innerHTML = '';
+            uploadedOfferImgUrl = '';
+        }
+    });
+    window.editOffer = function(id) {
+        const o = offers.find(ofr => ofr._id === id);
+        document.getElementById('offerId').value = o._id;
+        document.getElementById('offerTitle').value = o.title;
+        document.getElementById('offerSubtitle').value = o.subtitle || '';
+        uploadedOfferImgUrl = o.image || '';
+        document.getElementById('offerImgPreview').innerHTML = uploadedOfferImgUrl ? `<img src='${uploadedOfferImgUrl}' style='max-width:120px;max-height:120px;border-radius:8px;'>` : '';
+        document.getElementById('offerImgFile').value = '';
+        document.getElementById('offerLink').value = o.link || '';
+        document.getElementById('offerActive').checked = !!o.active;
+        document.getElementById('offerFormTitle').textContent = 'Edit Offer';
+        document.getElementById('offerFormSubmit').textContent = 'Update Offer';
+        document.getElementById('offerFormCancel').style.display = 'inline-block';
+    };
+    window.deleteOffer = async function(id) {
+        if (!confirm('Delete this offer?')) return;
+        const res = await fetch('/api/offers/' + id, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token: adminToken })
+        });
+        if (res.ok) fetchOffers();
+    };
+    document.getElementById('offerFormCancel').onclick = function() {
+        document.getElementById('offerForm').reset();
+        document.getElementById('offerId').value = '';
+        document.getElementById('offerImgPreview').innerHTML = '';
+        uploadedOfferImgUrl = '';
+        document.getElementById('offerFormTitle').textContent = 'Add New Offer';
+        document.getElementById('offerFormSubmit').textContent = 'Add Offer';
+        this.style.display = 'none';
+    };
+
     // Show login on load
     showTab('products');
     </script>

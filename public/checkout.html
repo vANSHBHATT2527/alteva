@@ -3,20 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkout - Altiva Naturals</title>
+    <title>Checkout - Alteva</title>
+    <!-- Dark Mode CSS -->
+    <link rel="stylesheet" href="dark-mode.css">
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: #eafaf1;
+            background: var(--bg-primary);
             margin: 0;
             padding: 0;
         }
         .container {
             max-width: 1100px;
             margin: 40px auto;
-            background: #fff;
+            background: var(--bg-secondary);
             border-radius: 16px;
-            box-shadow: 0 2px 16px rgba(56,142,60,0.10);
+            box-shadow: 0 2px 16px var(--shadow-secondary);
             padding: 32px 24px;
             display: flex;
             gap: 40px;
@@ -25,7 +27,7 @@
             flex: 1;
         }
         h2 {
-            color: #388e3c;
+            color: var(--text-primary);
             margin-bottom: 18px;
         }
         .form-group {
@@ -34,15 +36,22 @@
         label {
             display: block;
             margin-bottom: 6px;
-            color: #388e3c;
+            color: var(--text-primary);
             font-weight: bold;
         }
         input[type="text"], input[type="email"], input[type="number"] {
             width: 100%;
             padding: 10px;
-            border: 1px solid #ccc;
+            border: 1px solid var(--border-light);
             border-radius: 6px;
             font-size: 15px;
+            background: var(--bg-input);
+            color: var(--text-primary);
+        }
+        input[type="text"]:focus, input[type="email"]:focus, input[type="number"]:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
         }
         .payment-methods {
             display: flex;
@@ -50,8 +59,8 @@
             margin-bottom: 18px;
         }
         .pay-btn {
-            background: #388e3c;
-            color: #fff;
+            background: var(--bg-button);
+            color: var(--text-white);
             border: none;
             padding: 14px 0;
             border-radius: 8px;
@@ -60,13 +69,14 @@
             cursor: pointer;
             width: 100%;
             margin-top: 18px;
+            transition: all 0.3s ease;
         }
         .pay-btn:hover {
-            background: #81c784;
-            color: #1b5e20;
+            background: var(--bg-button-hover);
+            color: var(--text-primary);
         }
         .order-summary, .price-summary {
-            background: #eafaf1;
+            background: var(--bg-tertiary);
             border-radius: 8px;
             padding: 18px 20px;
             margin-bottom: 18px;
@@ -82,28 +92,29 @@
             height: 60px;
             object-fit: contain;
             border-radius: 8px;
-            background: #eee;
+            background: var(--bg-secondary);
         }
         .order-item-details {
             flex: 1;
         }
         .order-item-title {
             font-weight: bold;
-            color: #388e3c;
+            color: var(--text-primary);
         }
         .order-item-price {
-            color: #43a047;
+            color: var(--accent-primary);
         }
         .summary-row {
             display: flex;
             justify-content: space-between;
             margin-bottom: 8px;
+            color: var(--text-primary);
         }
         .summary-row.final {
             font-weight: bold;
             font-size: 18px;
-            color: #1b5e20;
-            border-top: 1px solid #ddd;
+            color: var(--text-primary);
+            border-top: 1px solid var(--border-light);
             padding-top: 10px;
             margin-top: 15px;
         }
@@ -114,59 +125,62 @@
         }
         .coupon-row input {
             flex: 1;
-            border: 1px solid #a5d6a7;
+            border: 1px solid var(--border-secondary);
+            background: var(--bg-input);
+            color: var(--text-primary);
         }
         .success-message {
-            background: #d4edda;
-            color: #155724;
+            background: var(--bg-tertiary);
+            color: var(--accent-success);
             padding: 12px;
             border-radius: 6px;
             margin-bottom: 18px;
-            border: 1px solid #c3e6cb;
+            border: 1px solid var(--accent-success);
             display: none;
         }
         @media (max-width: 900px) {
             .container { flex-direction: column; }
         }
         .right {
-            background: linear-gradient(135deg, #eafaf1 60%, #b2ff59 100%);
+            background: linear-gradient(135deg, var(--bg-tertiary) 60%, var(--accent-secondary) 100%);
             border-radius: 16px;
-            box-shadow: 0 2px 16px rgba(56,142,60,0.10);
+            box-shadow: 0 2px 16px var(--shadow-secondary);
             padding: 24px 18px;
         }
         .order-summary {
-            background: #fff;
+            background: var(--bg-secondary);
             border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(67,160,71,0.10);
-            border-left: 6px solid #43a047;
+            box-shadow: 0 2px 8px var(--shadow-primary);
+            border-left: 6px solid var(--accent-primary);
             margin-bottom: 18px;
         }
         .order-item {
-            background: #eafaf1;
+            background: var(--bg-tertiary);
             border-radius: 8px;
             margin-bottom: 10px;
             padding: 10px 12px;
             display: flex;
             align-items: center;
-            box-shadow: 0 1px 4px rgba(67,160,71,0.06);
+            box-shadow: 0 1px 4px var(--shadow-primary);
             position: relative;
         }
         .coupon-row {
-            background: #f0fdf4;
+            background: var(--bg-input);
             border-radius: 8px;
             padding: 10px 8px;
-            box-shadow: 0 1px 4px rgba(67,160,71,0.06);
+            box-shadow: 0 1px 4px var(--shadow-primary);
             margin-bottom: 12px;
         }
         .coupon-row input {
-            border: 1px solid #43a047;
-            background: #fff;
+            border: 1px solid var(--accent-primary);
+            background: var(--bg-secondary);
             border-radius: 6px;
             padding: 8px;
+            color: var(--text-primary);
         }
         .coupon-row button {
-            background: #43a047;
-            color: #fff;
+            background: var(--accent-primary);
+            color: var(--text-white);
             border: none;
             border-radius: 6px;
             padding: 8px 18px;
@@ -175,25 +189,25 @@
             transition: background 0.2s;
         }
         .coupon-row button:hover {
-            background: #388e3c;
+            background: var(--bg-button-hover);
         }
         .price-summary {
-            background: #eafaf1;
+            background: var(--bg-tertiary);
             border-radius: 8px;
-            box-shadow: 0 1px 4px rgba(67,160,71,0.06);
+            box-shadow: 0 1px 4px var(--shadow-primary);
             padding: 18px 20px;
         }
         .summary-row.final {
-            color: #1b5e20;
-            border-top: 2px solid #43a047;
+            color: var(--text-primary);
+            border-top: 2px solid var(--accent-primary);
             margin-top: 12px;
             padding-top: 10px;
         }
         /* Update quantity and remove buttons in order summary */
         .order-item-price button {
-            background: #eafaf1;
-            border: 1px solid #43a047;
-            color: #388e3c;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--accent-primary);
+            color: var(--text-primary);
             border-radius: 4px;
             padding: 2px 8px;
             font-weight: bold;
@@ -201,21 +215,21 @@
             transition: background 0.2s;
         }
         .order-item-price button:hover {
-            background: #43a047;
-            color: #fff;
+            background: var(--accent-primary);
+            color: var(--text-white);
         }
         .order-item-price button:last-child {
-            color: #e74c3c;
+            color: var(--text-danger);
             background: none;
             border: none;
             font-size: 18px;
         }
         .order-item-price button:last-child:hover {
-            color: #b71c1c;
+            color: var(--text-danger-dark);
         }
         .navbar {
-            background: linear-gradient(90deg, #388e3c 0%, #81c784 100%);
-            box-shadow: 0 2px 8px rgba(56,142,60,0.08);
+            background: var(--bg-navbar);
+            box-shadow: 0 2px 8px var(--shadow-primary);
             position: sticky;
             top: 0;
             z-index: 100;
@@ -233,12 +247,12 @@
         .logo {
             font-size: 22px;
             font-weight: bold;
-            color: #fff;
-            background: linear-gradient(90deg, #43a047 0%, #a5d6a7 100%);
+            color: var(--text-white);
+            background: linear-gradient(90deg, var(--accent-primary) 0%, var(--accent-light) 100%);
             padding: 8px 18px;
             border-radius: 12px;
             letter-spacing: 1px;
-            box-shadow: 0 1px 8px rgba(67,160,71,0.12);
+            box-shadow: 0 1px 8px var(--shadow-light);
             display: flex;
             align-items: center;
             gap: 8px;
@@ -248,8 +262,8 @@
             font-size: 22px;
         }
         .search-bar input {
-            background: #f0fdf4;
-            border: 1px solid #a5d6a7;
+            background: var(--bg-input);
+            border: 1px solid var(--accent-light);
         }
         .nav-actions {
             display: flex;
@@ -257,9 +271,9 @@
             gap: 18px;
         }
         .nav-btn {
-            border: 1px solid #388e3c;
-            background: #eafaf1;
-            color: #388e3c;
+            border: 1px solid var(--accent-primary);
+            background: var(--bg-button);
+            color: var(--text-primary);
             border-radius: 6px;
             transition: all 0.3s;
             padding: 8px 18px;
@@ -270,8 +284,8 @@
             font-weight: 500;
         }
         .nav-btn:hover {
-            background: #388e3c;
-            color: #fff;
+            background: var(--bg-button-hover);
+            color: var(--text-white);
         }
         .cart-icon {
             position: relative;
@@ -283,8 +297,8 @@
             position: absolute;
             top: -8px;
             right: -10px;
-            background: #43a047;
-            color: white;
+            background: var(--accent-primary);
+            color: var(--text-white);
             border-radius: 50%;
             width: 18px;
             height: 18px;
@@ -315,26 +329,26 @@
             position: relative;
         }
         .step-card {
-            background: #fff;
+            background: var(--bg-secondary);
             border-radius: 18px;
-            box-shadow: 0 4px 24px rgba(56,142,60,0.10);
+            box-shadow: 0 4px 24px var(--shadow-secondary);
             padding: 32px 32px 24px 32px;
             margin-bottom: 0;
             margin-top: 0;
-            border: 1.5px solid #eafaf1;
+            border: 1.5px solid var(--border-light);
         }
         .step-indicator {
             font-size: 18px;
             font-weight: bold;
-            color: #388e3c;
+            color: var(--accent-primary);
             margin-bottom: 18px;
             display: flex;
             align-items: center;
             gap: 10px;
         }
         .step-num {
-            background: #eafaf1;
-            color: #388e3c;
+            background: var(--bg-tertiary);
+            color: var(--accent-primary);
             border-radius: 50%;
             width: 32px;
             height: 32px;
@@ -344,20 +358,20 @@
             font-size: 18px;
             font-weight: bold;
             margin-right: 6px;
-            border: 2px solid #43a047;
+            border: 2px solid var(--accent-primary);
         }
         .cart-summary-card {
-            background: #fff;
+            background: var(--bg-secondary);
             border-radius: 18px;
-            box-shadow: 0 4px 24px rgba(56,142,60,0.10);
+            box-shadow: 0 4px 24px var(--shadow-secondary);
             padding: 32px 32px 24px 32px;
             margin-bottom: 0;
-            border: 1.5px solid #eafaf1;
+            border: 1.5px solid var(--border-light);
             position: sticky;
             top: 0;
         }
         .cart-summary-title {
-            color: #388e3c;
+            color: var(--accent-primary);
             font-size: 22px;
             font-weight: bold;
             margin-bottom: 18px;
@@ -375,20 +389,20 @@
             margin-bottom: 0;
         }
         .cart-btn {
-            background: #388e3c;
-            color: #fff;
+            background: var(--bg-button);
+            color: var(--text-white);
             border: none;
             padding: 14px 0;
             border-radius: 8px;
             font-weight: bold;
             font-size: 17px;
             cursor: pointer;
-            box-shadow: 0 2px 8px rgba(56,142,60,0.07);
-            transition: background 0.2s, color 0.2s;
+            box-shadow: 0 2px 8px var(--shadow-light);
+            transition: all 0.3s ease;
         }
         .cart-btn:hover {
-            background: #81c784;
-            color: #1b5e20;
+            background: var(--bg-button-hover);
+            color: var(--text-primary);
         }
         .order-item-details {
             display: flex;
@@ -396,19 +410,19 @@
             gap: 10px;
         }
         .order-item {
-            background: #eafaf1;
+            background: var(--bg-tertiary);
             border-radius: 8px;
             margin-bottom: 10px;
             padding: 10px 12px;
             display: flex;
             align-items: center;
-            box-shadow: 0 1px 4px rgba(67,160,71,0.06);
+            box-shadow: 0 1px 4px var(--shadow-primary);
             position: relative;
         }
         .order-item-title {
             font-weight: bold;
             font-size: 1.08rem;
-            color: #388e3c;
+            color: var(--text-primary);
             text-decoration: underline;
             margin-right: 8px;
         }
@@ -417,24 +431,24 @@
             height: 32px;
             object-fit: cover;
             border-radius: 6px;
-            background: #fff;
-            border: 1px solid #eafaf1;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-light);
         }
         .order-item-price {
             font-size: 1rem;
-            color: #1b5e20;
+            color: var(--text-primary);
             margin-left: 8px;
         }
         .price-summary {
-            background: #eafaf1;
+            background: var(--bg-tertiary);
             border-radius: 8px;
-            box-shadow: 0 1px 4px rgba(67,160,71,0.06);
+            box-shadow: 0 1px 4px var(--shadow-primary);
             padding: 18px 20px;
             margin-top: 18px;
         }
         .summary-row.final {
-            color: #1b5e20;
-            border-top: 2px solid #43a047;
+            color: var(--text-primary);
+            border-top: 2px solid var(--accent-primary);
             margin-top: 12px;
             padding-top: 10px;
         }
@@ -453,11 +467,15 @@
 <body>
     <nav class="navbar">
         <div class="nav-container">
-            <div class="logo">ALTIVA NATURALS</div>
+            <div class="logo">Alteva</div>
             <div class="nav-actions">
                 <a href="index.html" class="nav-btn">HOME</a>
                 <div class="profile-dropdown" id="profileNavBtn"></div>
                 <div class="cart-icon" id="cartIcon">🛒<span class="cart-count" id="cartCount">0</span></div>
+                <button class="theme-toggle" id="themeToggle">
+                    <span class="sun-icon">☀️</span>
+                    <span class="moon-icon">🌙</span>
+                </button>
             </div>
         </div>
     </nav>
@@ -480,7 +498,7 @@
                     </div>
                     <div class="form-group newsletter-row">
                         <input type="checkbox" id="newsletter" checked style="margin-right:8px;">
-                        <label for="newsletter" style="font-size:14px;color:#388e3c;">Stay up to date with exclusive offers and news.</label>
+                        <label for="newsletter" style="font-size:14px;color:var(--accent-primary);">Stay up to date with exclusive offers and news.</label>
                     </div>
                 </form>
             </div>
@@ -532,7 +550,7 @@
         </div>
     </div>
     <!-- Toast Notification -->
-    <div id="toast" style="display:none;position:fixed;top:24px;right:24px;z-index:2000;background:#2c3e2d;color:#fff;padding:16px 28px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12);font-size:16px;min-width:180px;text-align:center;opacity:0;transition:opacity 0.3s;pointer-events:none;">Notification</div>
+    <div id="toast" style="display:none;position:fixed;top:24px;right:24px;z-index:2000;background:var(--bg-dark);color:var(--text-white);padding:16px 28px;border-radius:8px;box-shadow:0 2px 8px var(--shadow-light);font-size:16px;min-width:180px;text-align:center;opacity:0;transition:opacity 0.3s;pointer-events:none;">Notification</div>
     <script>
         // Simulate cart data (replace with real cart integration)
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -584,11 +602,11 @@
                         <img src="${imgUrl}" alt="${item.name}" style="width:32px;height:32px;object-fit:cover;border-radius:6px;">
                         <a class="order-item-title" href="product.html?name=${encodeURIComponent(item.name)}" style="color:inherit;text-decoration:underline;cursor:pointer;">${item.name}</a>
                         <div class="order-item-price">₹${item.price} x 
-                            <button onclick="updateCheckoutQuantity(${idx}, -1)" style="margin:0 6px; padding:2px 8px; border-radius:4px; border:1px solid #ccc; background:#fff; cursor:pointer;">-</button>
+                            <button onclick="updateCheckoutQuantity(${idx}, -1)" style="margin:0 6px; padding:2px 8px; border-radius:4px; border:1px solid var(--border-light); background:var(--bg-secondary); cursor:pointer;">-</button>
                             <span style="font-weight:bold;">${item.quantity}</span>
-                            <button onclick="updateCheckoutQuantity(${idx}, 1)" style="margin:0 6px; padding:2px 8px; border-radius:4px; border:1px solid #ccc; background:#fff; cursor:pointer;">+</button>
+                            <button onclick="updateCheckoutQuantity(${idx}, 1)" style="margin:0 6px; padding:2px 8px; border-radius:4px; border:1px solid var(--border-light); background:var(--bg-secondary); cursor:pointer;">+</button>
                             = ₹${item.price * item.quantity}
-                            <button onclick="removeCheckoutItem(${idx})" style="margin-left:16px; color:#e74c3c; background:none; border:none; font-size:16px; cursor:pointer;">&times;</button>
+                            <button onclick="removeCheckoutItem(${idx})" style="margin-left:16px; color:var(--text-danger); background:none; border:none; font-size:16px; cursor:pointer;">&times;</button>
                         </div>
                     </div>
                 </div>
@@ -638,7 +656,7 @@
             if (email) {
                 if (profileBtn) {
                     profileBtn.style.display = 'inline-block';
-                    profileBtn.innerHTML = `<img src='https://cdn-icons-png.flaticon.com/512/1144/1144760.png' alt='Profile' style='width:32px;height:32px;border-radius:50%;vertical-align:middle;cursor:pointer;' id='profileImg'><span id='profileEmail' style='margin-left:8px;vertical-align:middle;font-size:14px;color:#7a8471;'>${email}</span><div class='dropdown-menu' id='profileDropdownMenu' style='display:none;position:absolute;right:0;top:40px;background:#fff;border:1px solid #ddd;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.08);min-width:150px;z-index:1001;'><a href='#' class='dropdown-item' style='display:block;padding:10px 18px;color:#2c3e2d;text-decoration:none;' onclick='showMyOrders()'>My Orders</a><a href='#' class='dropdown-item' style='display:block;padding:10px 18px;color:#e74c3c;text-decoration:none;' onclick='logoutUser()'>Logout</a></div>`;
+                    profileBtn.innerHTML = `<img src='https://cdn-icons-png.flaticon.com/512/1144/1144760.png' alt='Profile' style='width:32px;height:32px;border-radius:50%;vertical-align:middle;cursor:pointer;' id='profileImg'><span id='profileEmail' style='margin-left:8px;vertical-align:middle;font-size:14px;color:var(--text-secondary);'>${email}</span><div class='dropdown-menu' id='profileDropdownMenu' style='display:none;position:absolute;right:0;top:40px;background:var(--bg-secondary);border:1px solid var(--border-light);border-radius:8px;box-shadow:0 2px 8px var(--shadow-light);min-width:150px;z-index:1001;'><a href='#' class='dropdown-item' style='display:block;padding:10px 18px;color:var(--text-primary);text-decoration:none;' onclick='showMyOrders()'>My Orders</a><a href='#' class='dropdown-item' style='display:block;padding:10px 18px;color:var(--text-danger);text-decoration:none;' onclick='logoutUser()'>Logout</a></div>`;
                 }
             } else {
                 if (profileBtn) {
@@ -826,6 +844,13 @@
                         })
                         .catch(() => showToast('Order placed, but shipping failed.'));
                     }
+                    // Redirect to order summary page
+                    if (data.orderId) {
+                        setTimeout(() => {
+                            window.location.href = `order-summary.html?orderId=${encodeURIComponent(data.orderId)}`;
+                        }, 800);
+                        return;
+                    }
                     localStorage.removeItem('cart');
                     this.reset();
                     cart = [];
@@ -851,5 +876,7 @@
         style.innerHTML = `.shake { animation: shake 0.4s; } @keyframes shake { 0%{transform:translateX(0);} 20%{transform:translateX(-6px);} 40%{transform:translateX(6px);} 60%{transform:translateX(-4px);} 80%{transform:translateX(4px);} 100%{transform:translateX(0);} }`;
         document.head.appendChild(style);
     </script>
+    <!-- Dark Mode JavaScript -->
+    <script src="dark-mode.js"></script>
 </body>
 </html> 

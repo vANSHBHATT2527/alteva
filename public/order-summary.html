@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Summary - Alteva</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <!-- Dark Mode CSS -->
+    <link rel="stylesheet" href="dark-mode.css">
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            background: var(--bg-primary); 
+            margin: 0; 
+            padding: 0; 
+        }
+        .container { 
+            max-width: 700px; 
+            margin: 40px auto; 
+            background: var(--bg-secondary); 
+            border-radius: 16px; 
+            box-shadow: 0 2px 16px var(--shadow-secondary); 
+            padding: 32px 24px; 
+        }
+        h1 { 
+            color: var(--text-primary); 
+            margin-bottom: 18px; 
+        }
+        .order-info { 
+            margin-bottom: 32px; 
+            color: var(--text-primary);
+        }
+        .order-table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-bottom: 24px; 
+        }
+        .order-table th, .order-table td { 
+            border: 1px solid var(--border-light); 
+            padding: 10px; 
+            text-align: left; 
+            font-size: 15px; 
+        }
+        .order-table th { 
+            background: var(--bg-tertiary); 
+            color: var(--text-primary); 
+        }
+        .order-table tr:nth-child(even) { 
+            background: var(--bg-tertiary); 
+        }
+        .order-table tr:nth-child(odd) { 
+            background: var(--bg-secondary); 
+        }
+        .order-table td {
+            color: var(--text-primary);
+        }
+        .review-section { 
+            background: var(--bg-tertiary); 
+            border-radius: 12px; 
+            padding: 18px; 
+            margin-bottom: 24px; 
+        }
+        .review-section h3 { 
+            margin-top: 0; 
+            color: var(--text-primary); 
+        }
+        .review-form label { 
+            display: block; 
+            margin-bottom: 6px; 
+            color: var(--text-primary); 
+            font-weight: bold; 
+        }
+        .review-form textarea { 
+            width: 100%; 
+            padding: 8px; 
+            border: 1px solid var(--border-light); 
+            border-radius: 6px; 
+            font-size: 15px; 
+            margin-bottom: 12px; 
+            background: var(--bg-input);
+            color: var(--text-primary);
+        }
+        .review-form select { 
+            padding: 6px; 
+            border-radius: 6px; 
+            border: 1px solid var(--border-light); 
+            margin-bottom: 12px; 
+            background: var(--bg-input);
+            color: var(--text-primary);
+        }
+        .review-form button { 
+            background: var(--bg-button); 
+            color: var(--text-white); 
+            border: none; 
+            padding: 10px 18px; 
+            border-radius: 8px; 
+            font-weight: bold; 
+            font-size: 15px; 
+            cursor: pointer; 
+            margin-right: 8px; 
+            transition: all 0.3s ease;
+        }
+        .review-form button:hover { 
+            background: var(--bg-button-hover); 
+            color: var(--text-primary); 
+        }
+        .success-msg { 
+            color: var(--accent-success); 
+            margin-bottom: 12px; 
+            font-weight: bold; 
+        }
+        .skip-link { 
+            color: var(--text-secondary); 
+            text-decoration: underline; 
+            cursor: pointer; 
+            font-size: 15px; 
+            margin-left: 8px; 
+        }
+        .no-order { 
+            color: var(--accent-danger); 
+            text-align: center; 
+            margin-top: 40px; 
+            font-size: 18px; 
+        }
+        /* Modern Review Form Styles */
+        .review-form {
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px var(--shadow-primary);
+            max-width: 480px;
+        }
+        .review-form input[type="text"],
+        .review-form input[type="email"],
+        .review-form textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-primary);
+            border-radius: 6px;
+            font-size: 15px;
+            margin-bottom: 12px;
+            outline: none;
+            transition: border 0.2s;
+            background: var(--bg-input);
+            color: var(--text-primary);
+        }
+        .review-form input[type="text"]:focus,
+        .review-form input[type="email"]:focus,
+        .review-form textarea:focus {
+            border: 1.5px solid var(--accent-primary);
+            box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+        }
+        .review-form .star-rating {
+            display: flex;
+            gap: 4px;
+            font-size: 28px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        .review-form .star {
+            color: #bdbdbd;
+            transition: color 0.2s;
+        }
+        .review-form .star.selected,
+        .review-form .star.hovered {
+            color: #ffb400;
+        }
+        .review-form .quick-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        .review-form .quick-tag {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-primary);
+            border-radius: 16px;
+            padding: 5px 14px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-bottom: 4px;
+            transition: background 0.2s, color 0.2s;
+        }
+        .review-form .quick-tag:hover {
+            background: var(--accent-primary);
+            color: var(--text-white);
+        }
+        .review-form .success-msg {
+            color: var(--accent-success);
+            margin-bottom: 12px;
+            font-weight: bold;
+        }
+        .review-form .skip-link {
+            color: var(--text-secondary);
+            text-decoration: underline;
+            cursor: pointer;
+            font-size: 15px;
+            margin-left: 8px;
+        }
+        .main-btn {
+            display: inline-block;
+            background: var(--bg-button);
+            color: var(--text-white) !important;
+            border: none;
+            padding: 12px 32px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+            margin-top: 8px;
+        }
+        .main-btn:hover {
+            background: var(--bg-button-hover);
+            color: var(--text-primary) !important;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                margin: 20px auto;
+                padding: 20px 16px;
+            }
+            .main-btn {
+                display: block;
+                margin: 8px 0;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Order Summary</h1>
+        <div id="orderInfo" class="order-info"></div>
+        <div class="order-summary-actions" style="margin-bottom:24px;">
+            <a href="index.html" class="main-btn">Back to Home</a>
+            <a href="myorders.html" class="main-btn" style="margin-left:12px;">View My Orders</a>
+        </div>
+        <table class="order-table" id="orderTable" style="display:none;"></table>
+        <div id="reviewForms"></div>
+        <div id="noOrderMsg" class="no-order" style="display:none;"></div>
+    </div>
+    <script>
+    let userToken = localStorage.getItem('userToken') || localStorage.getItem('token') || null;
+    let userEmail = localStorage.getItem('userEmail') || null;
+    let orderId = null;
+    // Try to get orderId from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('orderId')) orderId = urlParams.get('orderId');
+
+    async function fetchOrder() {
+        if (!userToken) {
+            document.getElementById('noOrderMsg').textContent = 'You must be logged in to view your order summary.';
+            document.getElementById('noOrderMsg').style.display = 'block';
+            return null;
+        }
+        let order = null;
+        try {
+            if (orderId) {
+                // Fetch specific order by ID (if endpoint exists)
+                const res = await fetch(`/api/orders/${orderId}?token=${encodeURIComponent(userToken)}`);
+                if (res.ok) order = await res.json();
+            } else {
+                // Fallback: fetch all user orders and pick the latest
+                const res = await fetch(`/api/my-orders`, {
+                    headers: { 'Authorization': 'Bearer ' + userToken }
+                });
+                if (res.ok) {
+                    const orders = await res.json();
+                    if (Array.isArray(orders) && orders.length > 0) {
+                        order = orders[0]; // Most recent
+                    }
+                }
+            }
+        } catch (e) {}
+        if (!order) {
+            document.getElementById('noOrderMsg').textContent = 'No recent order found.';
+            document.getElementById('noOrderMsg').style.display = 'block';
+            return null;
+        }
+        document.getElementById('noOrderMsg').style.display = 'none';
+        renderOrder(order);
+        renderReviewForms(order);
+    }
+
+    function renderOrder(order) {
+        const infoDiv = document.getElementById('orderInfo');
+        infoDiv.innerHTML = `<b>Order ID:</b> ${order._id || ''}<br><b>Date:</b> ${order._id ? new Date(parseInt(order._id.substring(0,8), 16) * 1000).toLocaleString() : ''}<br><b>Total:</b> ₹${order.total || 0}<br><b>Status:</b> ${order.status || 'pending'}`;
+        const table = document.getElementById('orderTable');
+        if (Array.isArray(order.cart) && order.cart.length > 0) {
+            table.style.display = '';
+            table.innerHTML = `<tr><th>Product</th><th>Quantity</th><th>Price</th></tr>` +
+                order.cart.map(item => `<tr><td>${item.name}</td><td>${item.quantity}</td><td>₹${item.price}</td></tr>`).join('');
+        } else {
+            table.style.display = 'none';
+        }
+    }
+
+    function renderReviewForms(order) {
+        const reviewDiv = document.getElementById('reviewForms');
+        reviewDiv.innerHTML = '';
+        if (!Array.isArray(order.cart) || order.cart.length === 0) return;
+        order.cart.forEach(item => {
+            const form = document.createElement('form');
+            form.className = 'review-form review-section';
+            // Pre-fill name/email if available
+            const userName = localStorage.getItem('userName') || '';
+            const userEmail = localStorage.getItem('userEmail') || '';
+            form.innerHTML = `
+                <h3>Write a Review</h3>
+                <input type="text" name="name" placeholder="Your Name" value="${userName}">
+                <input type="email" name="email" placeholder="Your Email" value="${userEmail}">
+                <div class="star-rating">
+                    <span class="star" data-value="1">&#9733;</span>
+                    <span class="star" data-value="2">&#9733;</span>
+                    <span class="star" data-value="3">&#9733;</span>
+                    <span class="star" data-value="4">&#9733;</span>
+                    <span class="star" data-value="5">&#9733;</span>
+                </div>
+                <textarea name="comment" rows="2" placeholder="Your Review"></textarea>
+                <div class="quick-tags">
+                    <span class="quick-tag">Liked it</span>
+                    <span class="quick-tag">Great product</span>
+                    <span class="quick-tag">Fast delivery</span>
+                    <span class="quick-tag">Value for money</span>
+                    <span class="quick-tag">Would recommend</span>
+                    <span class="quick-tag">Not satisfied</span>
+                    <span class="quick-tag">Excellent quality</span>
+                    <span class="quick-tag">Good packaging</span>
+                    <span class="quick-tag">Will buy again</span>
+                </div>
+                <div style="font-size:13px;color:#888;margin-bottom:10px;">Mention what you liked about the product.</div>
+                <button type="submit">Submit Review</button>
+                <span class="skip-link" onclick="this.closest('form').style.display='none'">Skip</span>
+                <div class="success-msg" style="display:none;"></div>
+            `;
+            // Star rating logic
+            const stars = form.querySelectorAll('.star');
+            let selectedRating = 0;
+            stars.forEach(star => {
+                star.addEventListener('mouseenter', function() {
+                    stars.forEach(s => s.classList.remove('hovered'));
+                    for (let i = 0; i < parseInt(star.dataset.value); i++) stars[i].classList.add('hovered');
+                });
+                star.addEventListener('mouseleave', function() {
+                    stars.forEach(s => s.classList.remove('hovered'));
+                });
+                star.addEventListener('click', function() {
+                    selectedRating = parseInt(star.dataset.value);
+                    stars.forEach((s, idx) => {
+                        if (idx < selectedRating) s.classList.add('selected');
+                        else s.classList.remove('selected');
+                    });
+                });
+            });
+            // Quick tag logic
+            form.querySelectorAll('.quick-tag').forEach(tag => {
+                tag.addEventListener('click', function() {
+                    const textarea = form.querySelector('textarea');
+                    if (textarea.value && !textarea.value.endsWith(' ')) textarea.value += ' ';
+                    textarea.value += tag.textContent + ' ';
+                    textarea.focus();
+                });
+            });
+            form.onsubmit = async function(e) {
+                e.preventDefault();
+                const name = form.name.value.trim() || userName || 'User';
+                const email = form.email.value.trim() || userEmail || '';
+                const comment = form.comment.value.trim();
+                const rating = selectedRating;
+                if (!rating && !comment) {
+                    form.querySelector('.success-msg').textContent = 'No review submitted.';
+                    form.querySelector('.success-msg').style.display = 'block';
+                    setTimeout(() => { form.style.display = 'none'; }, 1000);
+                    return;
+                }
+                try {
+                    const res = await fetch(`/api/reviews/${item._id || ''}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + (localStorage.getItem('userToken') || '')
+                        },
+                        body: JSON.stringify({ rating, comment, name, email })
+                    });
+                    if (res.ok) {
+                        form.querySelector('.success-msg').textContent = 'Thank you for your review!';
+                        form.querySelector('.success-msg').style.display = 'block';
+                        setTimeout(() => { form.style.display = 'none'; }, 1200);
+                    } else {
+                        form.querySelector('.success-msg').textContent = 'Could not submit review.';
+                        form.querySelector('.success-msg').style.display = 'block';
+                    }
+                } catch (e) {
+                    form.querySelector('.success-msg').textContent = 'Could not submit review.';
+                    form.querySelector('.success-msg').style.display = 'block';
+                }
+            };
+            reviewDiv.appendChild(form);
+        });
+    }
+
+    fetchOrder();
+    </script>
+    <!-- Dark Mode JavaScript -->
+    <script src="dark-mode.js"></script>
+</body>
+</html> 

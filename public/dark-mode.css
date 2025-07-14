@@ -1,0 +1,331 @@
+/* Dark Mode CSS Variables and Styles */
+:root {
+    /* Light Mode Colors */
+    --bg-primary: #eafaf1;
+    --bg-secondary: #fff;
+    --bg-tertiary: #f0fdf4;
+    --bg-navbar: linear-gradient(90deg, #388e3c 0%, #81c784 100%);
+    --bg-hero: linear-gradient(90deg, #66bb6a 0%, #b2ff59 100%);
+    --bg-card: #fff;
+    --bg-button: #388e3c;
+    --bg-button-hover: #81c784;
+    --bg-button-secondary: #eafaf1;
+    --bg-modal: #fff;
+    --bg-input: #f0fdf4;
+    
+    --text-primary: #2c3e2d;
+    --text-secondary: #7a8471;
+    --text-light: #666;
+    --text-white: #fff;
+    --text-hero: #1b5e20;
+    --text-muted: #999;
+    
+    --border-primary: #43a047;
+    --border-secondary: #a5d6a7;
+    --border-light: #ddd;
+    --border-input: #a5d6a7;
+    
+    --shadow-primary: rgba(56,142,60,0.08);
+    --shadow-secondary: rgba(56,142,60,0.10);
+    --shadow-card: rgba(0,0,0,0.1);
+    --shadow-modal: rgba(0,0,0,0.3);
+    
+    --accent-primary: #43a047;
+    --accent-secondary: #a5d6a7;
+    --accent-warning: #ffc107;
+    --accent-success: #28a745;
+    --accent-danger: #dc3545;
+    --accent-info: #17a2b8;
+}
+
+/* Dark Mode Colors */
+[data-theme="dark"] {
+    --bg-primary: #1a1a1a;
+    --bg-secondary: #2d2d2d;
+    --bg-tertiary: #333333;
+    --bg-navbar: linear-gradient(90deg, #1b5e20 0%, #388e3c 100%);
+    --bg-hero: linear-gradient(90deg, #2e7d32 0%, #4caf50 100%);
+    --bg-card: #2d2d2d;
+    --bg-button: #4caf50;
+    --bg-button-hover: #66bb6a;
+    --bg-button-secondary: #333333;
+    --bg-modal: #2d2d2d;
+    --bg-input: #333333;
+    
+    --text-primary: #ffffff;
+    --text-secondary: #cccccc;
+    --text-light: #999999;
+    --text-white: #ffffff;
+    --text-hero: #ffffff;
+    --text-muted: #888888;
+    
+    --border-primary: #4caf50;
+    --border-secondary: #66bb6a;
+    --border-light: #444444;
+    --border-input: #4caf50;
+    
+    --shadow-primary: rgba(0,0,0,0.3);
+    --shadow-secondary: rgba(0,0,0,0.4);
+    --shadow-card: rgba(0,0,0,0.2);
+    --shadow-modal: rgba(0,0,0,0.5);
+    
+    --accent-primary: #4caf50;
+    --accent-secondary: #66bb6a;
+    --accent-warning: #ffc107;
+    --accent-success: #28a745;
+    --accent-danger: #dc3545;
+    --accent-info: #17a2b8;
+}
+
+/* Dark Mode Toggle Button */
+.theme-toggle {
+    background: var(--bg-button-secondary);
+    border: 1px solid var(--border-primary);
+    color: var(--text-primary);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    transition: all 0.3s ease;
+    margin-left: 10px;
+}
+
+.theme-toggle:hover {
+    background: var(--bg-button);
+    color: var(--text-white);
+    transform: scale(1.05);
+}
+
+.theme-toggle .sun-icon {
+    display: none;
+}
+
+.theme-toggle .moon-icon {
+    display: block;
+}
+
+[data-theme="dark"] .theme-toggle .sun-icon {
+    display: block;
+}
+
+[data-theme="dark"] .theme-toggle .moon-icon {
+    display: none;
+}
+
+/* Global Dark Mode Styles */
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Navbar Dark Mode */
+.navbar {
+    background: var(--bg-navbar);
+    box-shadow: 0 2px 8px var(--shadow-primary);
+}
+
+.logo {
+    color: var(--text-white);
+    background: linear-gradient(90deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+    box-shadow: 0 1px 8px var(--shadow-secondary);
+}
+
+.search-bar input {
+    border: 1px solid var(--border-secondary);
+    background: var(--bg-input);
+    color: var(--text-primary);
+}
+
+.search-bar input:focus {
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+}
+
+.nav-btn {
+    border: 1px solid var(--border-primary);
+    background: var(--bg-button-secondary);
+    color: var(--text-primary);
+}
+
+.nav-btn:hover {
+    background: var(--bg-button);
+    color: var(--text-white);
+}
+
+.cart-icon {
+    color: var(--text-white);
+}
+
+.cart-count {
+    background: var(--accent-primary);
+    color: var(--text-white);
+}
+
+/* Hero Section Dark Mode */
+.hero-banner {
+    background: var(--bg-hero);
+    color: var(--text-hero);
+    box-shadow: 0 4px 24px var(--shadow-secondary);
+}
+
+.hero-cta {
+    background: var(--bg-button);
+    color: var(--text-white);
+    box-shadow: 0 2px 8px var(--shadow-card);
+}
+
+.hero-cta:hover {
+    background: var(--bg-button-hover);
+    color: var(--text-hero);
+}
+
+/* Product Cards Dark Mode */
+.product-card {
+    background: var(--bg-card);
+    box-shadow: 0 2px 10px var(--shadow-card);
+}
+
+.product-image {
+    background: var(--bg-tertiary);
+}
+
+.product-title {
+    color: var(--text-primary);
+}
+
+.product-price {
+    color: var(--text-primary);
+}
+
+.original-price {
+    color: var(--text-muted);
+}
+
+.buy-btn {
+    background: var(--bg-button);
+    color: var(--text-white);
+}
+
+.buy-btn:hover {
+    background: var(--bg-button-hover);
+}
+
+/* Modal Dark Mode */
+.modal-content {
+    background-color: var(--bg-modal);
+}
+
+.modal-header {
+    background: var(--bg-button);
+    color: var(--text-white);
+}
+
+.close {
+    color: var(--text-white);
+}
+
+.form-group label {
+    color: var(--text-primary);
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    border: 1px solid var(--border-input);
+    background: var(--bg-input);
+    color: var(--text-primary);
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    border-color: var(--accent-primary);
+    outline: none;
+}
+
+.submit-btn {
+    background: var(--bg-button);
+    color: var(--text-white);
+}
+
+.submit-btn:hover {
+    background: var(--bg-button-hover);
+}
+
+/* Table Dark Mode */
+table {
+    background: var(--bg-secondary);
+}
+
+th {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    border-bottom: 2px solid var(--border-light);
+}
+
+tr:nth-child(even) {
+    background: var(--bg-tertiary);
+}
+
+tr:nth-child(odd) {
+    background: var(--bg-secondary);
+}
+
+td {
+    color: var(--text-primary);
+}
+
+/* Status Badges Dark Mode */
+.status-pending {
+    background: var(--bg-tertiary);
+    color: var(--accent-warning);
+    border: 1px solid var(--accent-warning);
+}
+
+.status-completed {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    border: 1px solid var(--accent-success);
+}
+
+.status-cancelled {
+    background: var(--bg-tertiary);
+    color: var(--accent-danger);
+    border: 1px solid var(--accent-danger);
+}
+
+/* Success/Error Messages Dark Mode */
+.success-message {
+    background: var(--bg-tertiary);
+    color: var(--accent-success);
+    border: 1px solid var(--accent-success);
+}
+
+.error-message {
+    background: var(--bg-tertiary);
+    color: var(--accent-danger);
+    border: 1px solid var(--accent-danger);
+}
+
+/* Links Dark Mode */
+a {
+    color: var(--accent-primary);
+}
+
+a:hover {
+    color: var(--accent-secondary);
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .theme-toggle {
+        width: 36px;
+        height: 36px;
+        font-size: 16px;
+    }
+} 

@@ -3,25 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up - Altiva Naturals</title>
+    <title>Sign Up - Alteva</title>
+    <!-- Dark Mode CSS -->
+    <link rel="stylesheet" href="dark-mode.css">
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: #eafaf1;
+            background: var(--bg-primary);
             margin: 0;
             padding: 0;
         }
         .container {
             max-width: 400px;
             margin: 60px auto;
-            background: #fff;
+            background: var(--bg-secondary);
             border-radius: 16px;
-            box-shadow: 0 2px 16px rgba(56,142,60,0.10);
+            box-shadow: 0 2px 16px var(--shadow-secondary);
             padding: 32px 24px;
         }
         h1 {
             text-align: center;
-            color: #388e3c;
+            color: var(--text-primary);
             margin-bottom: 30px;
         }
         .form-group {
@@ -30,20 +32,28 @@
         label {
             display: block;
             margin-bottom: 8px;
-            color: #388e3c;
+            color: var(--text-primary);
             font-weight: 500;
         }
         input[type="email"], input[type="password"] {
             width: 100%;
             padding: 12px;
-            border: 1px solid #ddd;
+            border: 1px solid var(--border-light);
             border-radius: 6px;
             font-size: 14px;
+            background: var(--bg-input);
+            color: var(--text-primary);
+            box-sizing: border-box;
+        }
+        input[type="email"]:focus, input[type="password"]:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
         }
         .submit-btn {
             width: 100%;
-            background: #388e3c;
-            color: #fff;
+            background: var(--bg-button);
+            color: var(--text-white);
             border: none;
             padding: 12px;
             border-radius: 8px;
@@ -51,10 +61,11 @@
             font-weight: bold;
             cursor: pointer;
             margin-top: 10px;
+            transition: all 0.3s ease;
         }
         .submit-btn:hover {
-            background: #81c784;
-            color: #1b5e20;
+            background: var(--bg-button-hover);
+            color: var(--text-primary);
         }
         .message {
             margin-top: 18px;
@@ -65,12 +76,20 @@
             display: block;
             text-align: center;
             margin-top: 18px;
-            color: #388e3c;
+            color: var(--accent-primary);
             text-decoration: none;
+            transition: color 0.3s ease;
         }
         .link:hover {
-            color: #1b5e20;
+            color: var(--accent-secondary);
             text-decoration: underline;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                margin: 40px auto;
+                padding: 24px 20px;
+            }
         }
     </style>
 </head>
@@ -89,7 +108,7 @@
             <button type="submit" class="submit-btn">Register</button>
         </form>
         <div class="message" id="message"></div>
-        <a href="login.html" class="link">Already have an account? Login here</a>
+        <a href="index.html" class="link">Already have an account? Login here</a>
     </div>
     <script>
         document.getElementById('signupForm').addEventListener('submit', async function(e) {
@@ -106,17 +125,19 @@
                 });
                 const data = await res.json();
                 if (res.ok && data.success) {
-                    messageDiv.style.color = 'green';
+                    messageDiv.style.color = 'var(--accent-success)';
                     messageDiv.textContent = 'Registration successful! You can now login.';
                 } else {
-                    messageDiv.style.color = 'red';
+                    messageDiv.style.color = 'var(--accent-danger)';
                     messageDiv.textContent = data.error || 'Registration failed.';
                 }
             } catch (err) {
-                messageDiv.style.color = 'red';
+                messageDiv.style.color = 'var(--accent-danger)';
                 messageDiv.textContent = 'Registration failed.';
             }
         });
     </script>
+    <!-- Dark Mode JavaScript -->
+    <script src="dark-mode.js"></script>
 </body>
 </html> 

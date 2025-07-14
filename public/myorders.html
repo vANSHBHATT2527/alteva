@@ -3,41 +3,275 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Orders - Altiva Naturals</title>
-    <link rel="stylesheet" href="index.css">
+    <title>My Orders - Alteva</title>
+    <!-- Dark Mode CSS -->
+    <link rel="stylesheet" href="dark-mode.css">
     <style>
-        body { background: #eafaf1; font-family: Arial, sans-serif; margin: 0; }
-        .container { max-width: 900px; margin: 40px auto; background: #fff; border-radius: 16px; box-shadow: 0 2px 16px rgba(56,142,60,0.10); padding: 32px 24px; }
-        h2 { color: #388e3c; margin-bottom: 24px; }
-        .order-card { background: #eafaf1; border-radius: 12px; margin-bottom: 24px; padding: 20px 24px; box-shadow: 0 2px 8px rgba(67,160,71,0.08); }
-        .order-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-        .order-id { font-weight: bold; color: #388e3c; }
-        .order-status { font-weight: bold; color: #fff; background: #43a047; border-radius: 6px; padding: 4px 14px; font-size: 14px; }
-        .order-date { color: #7a8471; font-size: 14px; }
-        .order-items { margin-top: 10px; }
-        .order-item { display: flex; align-items: center; gap: 16px; margin-bottom: 8px; }
-        .order-item img { width: 48px; height: 48px; object-fit: cover; border-radius: 8px; background: #fff; border: 1px solid #eafaf1; }
-        .order-item-details { flex: 1; }
-        .order-item-title { font-weight: bold; color: #388e3c; }
-        .order-item-qty { color: #388e3c; font-size: 14px; margin-left: 8px; }
-        .order-total { font-weight: bold; color: #1b5e20; font-size: 18px; margin-top: 10px; }
-        .empty-msg { color: #888; text-align: center; margin-top: 60px; font-size: 20px; }
-        .navbar { background: linear-gradient(90deg, #388e3c 0%, #81c784 100%); box-shadow: 0 2px 8px rgba(56,142,60,0.08); position: sticky; top: 0; z-index: 100; padding: 0; }
-        .nav-container { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 64px; }
-        .logo { font-size: 22px; font-weight: bold; color: #fff; background: linear-gradient(90deg, #43a047 0%, #a5d6a7 100%); padding: 8px 18px; border-radius: 12px; letter-spacing: 1px; box-shadow: 0 1px 8px rgba(67,160,71,0.12); display: flex; align-items: center; gap: 8px; }
-        .logo::before { content: '\1F343'; font-size: 22px; }
-        .nav-actions { display: flex; align-items: center; gap: 18px; }
-        .nav-btn { border: 1px solid #388e3c; background: #eafaf1; color: #388e3c; border-radius: 6px; transition: all 0.3s; padding: 8px 18px; cursor: pointer; font-size: 13px; text-transform: uppercase; text-decoration: none; font-weight: 500; }
-        .nav-btn:hover { background: #388e3c; color: #fff; }
+        body { 
+            background: var(--bg-primary); 
+            font-family: Arial, sans-serif; 
+            margin: 0; 
+        }
+        .container { 
+            max-width: 900px; 
+            margin: 40px auto; 
+            background: var(--bg-secondary); 
+            border-radius: 16px; 
+            box-shadow: 0 2px 16px var(--shadow-secondary); 
+            padding: 32px 24px; 
+        }
+        h2 { 
+            color: var(--text-primary); 
+            margin-bottom: 24px; 
+        }
+        .order-card { 
+            background: var(--bg-tertiary); 
+            border-radius: 12px; 
+            margin-bottom: 24px; 
+            padding: 20px 24px; 
+            box-shadow: 0 2px 8px var(--shadow-primary);
+            transition: all 0.3s ease;
+        }
+        .order-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px var(--shadow-secondary);
+        }
+        .order-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 12px; 
+        }
+        .order-id { 
+            font-weight: bold; 
+            color: var(--text-primary); 
+        }
+        .order-status { 
+            font-weight: bold; 
+            color: var(--text-white); 
+            background: var(--accent-primary); 
+            border-radius: 6px; 
+            padding: 4px 14px; 
+            font-size: 14px; 
+        }
+        .order-date { 
+            color: var(--text-secondary); 
+            font-size: 14px; 
+        }
+        .order-items { 
+            margin-top: 10px; 
+        }
+        .order-item { 
+            display: flex; 
+            align-items: center; 
+            gap: 16px; 
+            margin-bottom: 8px; 
+        }
+        .order-item img { 
+            width: 48px; 
+            height: 48px; 
+            object-fit: cover; 
+            border-radius: 8px; 
+            background: var(--bg-secondary); 
+            border: 1px solid var(--border-light); 
+        }
+        .order-item-details { 
+            flex: 1; 
+        }
+        .order-item-title { 
+            font-weight: bold; 
+            color: var(--text-primary); 
+        }
+        .order-item-qty { 
+            color: var(--text-secondary); 
+            font-size: 14px; 
+            margin-left: 8px; 
+        }
+        .order-total { 
+            font-weight: bold; 
+            color: var(--text-primary); 
+            font-size: 18px; 
+            margin-top: 10px; 
+        }
+        .empty-msg { 
+            color: var(--text-light); 
+            text-align: center; 
+            margin-top: 60px; 
+            font-size: 20px; 
+        }
+        .navbar { 
+            background: var(--bg-navbar); 
+            box-shadow: 0 2px 8px var(--shadow-primary); 
+            position: sticky; 
+            top: 0; 
+            z-index: 100; 
+            padding: 0; 
+        }
+        .nav-container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            padding: 0 24px; 
+            height: 64px; 
+        }
+        .logo { 
+            font-size: 22px; 
+            font-weight: bold; 
+            color: var(--text-white); 
+            background: linear-gradient(90deg, var(--accent-primary) 0%, var(--accent-secondary) 100%); 
+            padding: 8px 18px; 
+            border-radius: 12px; 
+            letter-spacing: 1px; 
+            box-shadow: 0 1px 8px var(--shadow-secondary); 
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
+        }
+        .logo::before { 
+            content: '\1F343'; 
+            font-size: 22px; 
+        }
+        .nav-actions { 
+            display: flex; 
+            align-items: center; 
+            gap: 18px; 
+        }
+        .nav-btn { 
+            border: 1px solid var(--border-primary); 
+            background: var(--bg-button-secondary); 
+            color: var(--text-primary); 
+            border-radius: 6px; 
+            transition: all 0.3s; 
+            padding: 8px 18px; 
+            cursor: pointer; 
+            font-size: 13px; 
+            text-transform: uppercase; 
+            text-decoration: none; 
+            font-weight: 500; 
+        }
+        .nav-btn:hover { 
+            background: var(--bg-button); 
+            color: var(--text-white); 
+        }
+        
+        /* Modal Dark Mode Styles */
+        #orderDetailsModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: var(--shadow-modal);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: var(--bg-secondary);
+            max-width: 500px;
+            width: 95vw;
+            padding: 32px 24px;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px var(--shadow-secondary);
+            position: relative;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 12px;
+            right: 18px;
+            font-size: 22px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--accent-primary);
+        }
+        
+        .modal-title {
+            color: var(--text-primary);
+            margin-bottom: 10px;
+        }
+        
+        .modal-date {
+            margin-bottom: 10px;
+            color: var(--text-secondary);
+        }
+        
+        .modal-status {
+            margin-bottom: 10px;
+        }
+        
+        .modal-status span {
+            color: var(--text-white);
+            background: var(--accent-primary);
+            padding: 2px 10px;
+            border-radius: 6px;
+        }
+        
+        .modal-info {
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+        
+        .modal-info b {
+            color: var(--text-primary);
+        }
+        
+        .modal-items {
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+        
+        .modal-items ul {
+            padding-left: 18px;
+            color: var(--text-primary);
+        }
+        
+        .modal-total {
+            margin-top: 14px;
+            font-weight: bold;
+            color: var(--text-primary);
+        }
+        
+        @media (max-width: 600px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 8px;
+                padding: 8px 4px 0 4px;
+            }
+            .logo {
+                font-size: 18px;
+                padding: 6px 10px;
+            }
+            .nav-btn {
+                padding: 7px 10px;
+                font-size: 12px;
+            }
+            .container {
+                margin: 20px auto;
+                padding: 20px 16px;
+            }
+            .order-card {
+                padding: 16px 18px;
+            }
+        }
     </style>
 </head>
 <body>
     <nav class="navbar">
         <div class="nav-container">
-            <div class="logo">ALTIVA NATURALS</div>
+            <div class="logo">Alteva</div>
             <div class="nav-actions">
                 <a href="index.html" class="nav-btn">HOME</a>
                 <a href="checkout.html" class="nav-btn">CHECKOUT</a>
+                <button class="theme-toggle" id="themeToggle">
+                    <span class="sun-icon">☀️</span>
+                    <span class="moon-icon">🌙</span>
+                </button>
             </div>
         </div>
     </nav>
@@ -46,9 +280,9 @@
         <div id="ordersList"></div>
     </div>
     <!-- Order Details Modal -->
-    <div id="orderDetailsModal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.25);z-index:2000;align-items:center;justify-content:center;">
-        <div style="background:#fff;max-width:500px;width:95vw;padding:32px 24px;border-radius:16px;box-shadow:0 4px 24px rgba(56,142,60,0.15);position:relative;">
-            <button onclick="closeOrderDetails()" style="position:absolute;top:12px;right:18px;font-size:22px;background:none;border:none;cursor:pointer;color:#43a047;">&times;</button>
+    <div id="orderDetailsModal">
+        <div class="modal-content">
+            <button onclick="closeOrderDetails()" class="modal-close">&times;</button>
             <div id="orderDetailsContent"></div>
         </div>
     </div>
@@ -64,11 +298,11 @@
         const email = order.email || 'N/A';
         const phone = order.phone || 'N/A';
         content.innerHTML = `
-            <h3 style="color:#388e3c;margin-bottom:10px;">Order #${order.orderId || order._id || ''}</h3>
-            <div style="margin-bottom:10px;color:#7a8471;">${order.date || order.order_date || ''}</div>
-            <div style="margin-bottom:10px;"><b>Status:</b> <span style="color:#fff;background:#43a047;padding:2px 10px;border-radius:6px;">${order.status || 'Placed'}</span></div>
-            <div style="margin-bottom:10px;"><b>Payment:</b> ${order.payment || order.payment_method || 'N/A'}</div>
-            <div style="margin-bottom:10px;"><b>Shipping Address:</b><br>
+            <h3 class="modal-title">Order #${order.orderId || order._id || ''}</h3>
+            <div class="modal-date">${order.date || order.order_date || ''}</div>
+            <div class="modal-status"><b>Status:</b> <span>${order.status || 'Placed'}</span></div>
+            <div class="modal-info"><b>Payment:</b> ${order.payment || order.payment_method || 'N/A'}</div>
+            <div class="modal-info"><b>Shipping Address:</b><br>
                 <span><b>Name:</b> ${name}</span><br>
                 <span><b>Address:</b> ${address}</span><br>
                 <span><b>City:</b> ${city}</span><br>
@@ -77,13 +311,13 @@
                 <span><b>Email:</b> ${email}</span><br>
                 <span><b>Phone:</b> ${phone}</span>
             </div>
-            <div style="margin-bottom:10px;"><b>Items:</b></div>
-            <ul style="padding-left:18px;">
+            <div class="modal-items"><b>Items:</b></div>
+            <ul>
                 ${(order.cart || order.order_items || []).map(item => `
                     <li><b>${item.name}</b> x${item.quantity || item.units} - ₹${item.price || item.selling_price}</li>
                 `).join('')}
             </ul>
-            <div style="margin-top:14px;font-weight:bold;">Total: ₹${order.total || order.sub_total || ''}</div>
+            <div class="modal-total">Total: ₹${order.total || order.sub_total || ''}</div>
         `;
         document.getElementById('orderDetailsModal').style.display = 'flex';
     }
@@ -133,5 +367,7 @@
     }
     fetchMyOrders();
     </script>
+    <!-- Dark Mode JavaScript -->
+    <script src="dark-mode.js"></script>
 </body>
 </html> 

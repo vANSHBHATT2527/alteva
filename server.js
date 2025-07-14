@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -92,6 +93,69 @@ const productSchema = new mongoose.Schema({
 });
 const Product = mongoose.model('Product', productSchema);
 
+// Offer schema/model
+const offerSchema = new mongoose.Schema({
+  title: String,
+  subtitle: String,
+  image: String, // URL to offer image
+  link: String,  // Optional: link for CTA
+  active: { type: Boolean, default: true },
+  createdAt: { type: Date, default: Date.now }
+});
+const Offer = mongoose.model('Offer', offerSchema);
+
+// Review schema/model
+const reviewSchema = new mongoose.Schema({
+  productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
+  name: String,
+  email: String, // Add email field
+  rating: Number,
+  comment: String,
+  createdAt: { type: Date, default: Date.now }
+});
+const Review = mongoose.model('Review', reviewSchema);
+
+// Get reviews for a product
+app.get('/api/reviews/:productId', async (req, res) => {
+  const { productId } = req.params;
+  try {
+    const reviews = await Review.find({ productId }).sort({ createdAt: -1 });
+    res.json(reviews);
+  } catch (e) {
+    res.status(500).json({ error: 'Failed to fetch reviews' });
+  }
+});
+
+// Post a review for a product (requires login, rating or comment optional)
+app.post('/api/reviews/:productId', async (req, res) => {
+  const { productId } = req.params;
+  const { name, email, rating, comment } = req.body;
+  let token = req.headers.authorization;
+  if (!token && req.body.token) token = req.body.token;
+  if (token && token.startsWith('Bearer ')) token = token.slice(7);
+  if (!token) return res.status(401).json({ error: 'Login required' });
+  if (!name && !rating && !comment) {
+    return res.status(400).json({ error: 'No review data provided' });
+  }
+  try {
+    const decoded = jwt.verify(token, SECRET_KEY);
+    const user = await User.findOne({ email: decoded.email });
+    if (!user) return res.status(401).json({ error: 'Invalid user' });
+    // Only create review if at least one field is present
+    const review = await Review.create({
+      productId,
+      name: name || user.email,
+      email: email || user.email,
+      rating: rating || undefined,
+      comment: comment || ''
+    });
+    res.json({ success: true, review });
+  } catch (e) {
+    console.log('Review error:', e);
+    res.status(400).json({ error: e.message || 'Could not submit review' });
+  }
+});
+
 // Get all products
 app.get('/api/products', async (req, res) => {
   const products = await Product.find();
@@ -168,6 +232,58 @@ app.post('/api/products/seed', async (req, res) => {
   res.json({ message: 'Products seeded.' });
 });
 
+// Get all offers (admin or public)
+app.get('/api/offers', async (req, res) => {
+  const offers = await Offer.find().sort({ createdAt: -1 });
+  res.json(offers);
+});
+
+// Add a new offer (admin only)
+app.post('/api/offers/add', async (req, res) => {
+  const { token, offer } = req.body;
+  try {
+    const decoded = jwt.verify(token, SECRET_KEY);
+    const user = await User.findOne({ email: decoded.email });
+    if (!user || user.role !== 'admin') return res.status(401).json({ error: 'Unauthorized' });
+    if (!offer || typeof offer !== 'object') return res.status(400).json({ error: 'Invalid offer data' });
+    const newOffer = await Offer.create(offer);
+    res.json({ success: true, offer: newOffer });
+  } catch (e) {
+    res.status(401).json({ error: 'Unauthorized' });
+  }
+});
+
+// Edit an offer by ID (admin only)
+app.put('/api/offers/:id', async (req, res) => {
+  const { token, offer } = req.body;
+  const id = req.params.id;
+  try {
+    const decoded = jwt.verify(token, SECRET_KEY);
+    const user = await User.findOne({ email: decoded.email });
+    if (!user || user.role !== 'admin') return res.status(401).json({ error: 'Unauthorized' });
+    if (!offer || typeof offer !== 'object') return res.status(400).json({ error: 'Invalid offer data' });
+    const updated = await Offer.findByIdAndUpdate(id, offer, { new: true });
+    res.json({ success: true, offer: updated });
+  } catch (e) {
+    res.status(401).json({ error: 'Unauthorized' });
+  }
+});
+
+// Delete an offer by ID (admin only)
+app.delete('/api/offers/:id', async (req, res) => {
+  const { token } = req.body;
+  const id = req.params.id;
+  try {
+    const decoded = jwt.verify(token, SECRET_KEY);
+    const user = await User.findOne({ email: decoded.email });
+    if (!user || user.role !== 'admin') return res.status(401).json({ error: 'Unauthorized' });
+    await Offer.findByIdAndDelete(id);
+    res.json({ success: true });
+  } catch (e) {
+    res.status(401).json({ error: 'Unauthorized' });
+  }
+});
+
 // User registration
 app.post('/api/register', async (req, res) => {
   const { email, password, role } = req.body;
@@ -200,6 +316,21 @@ app.post('/api/orders', async (req, res) => {
   const { phone, email, name, address, pincode, city, state, payment, upi, cart, total } = req.body;
   try {
     const decoded = jwt.verify(token, SECRET_KEY);
+    // Fetch products to ensure we have _id for each cart item
+    const allProducts = await Product.find();
+    const cartWithIds = (cart || []).map(item => {
+      // Try to find the product by name (or sku if available)
+      const prod = allProducts.find(p => p.name === item.name || (item.sku && p.sku === item.sku));
+      return {
+        _id: prod ? prod._id : undefined,
+        name: item.name,
+        price: item.price,
+        quantity: item.quantity,
+        img: item.img || '',
+        sku: item.sku || '',
+        // ...add any other fields as needed
+      };
+    });
     const order = await Order.create({
       user: decoded.email,
       phone,
@@ -211,7 +342,7 @@ app.post('/api/orders', async (req, res) => {
       state,
       payment,
       upi,
-      cart,
+      cart: cartWithIds,
       total
     });
     res.json({ success: true, orderId: order._id });
@@ -254,6 +385,27 @@ app.get('/api/my-orders', async (req, res) => {
     res.json(orders);
   } catch (e) {
     res.status(401).json([]);
+  }
+});
+
+// Get a specific order by ID (for order summary)
+app.get('/api/orders/:id', async (req, res) => {
+  const { id } = req.params;
+  const token = req.query.token || (req.headers.authorization && req.headers.authorization.replace('Bearer ', ''));
+  if (!token) return res.status(401).json({ error: 'Unauthorized' });
+  try {
+    const decoded = jwt.verify(token, SECRET_KEY);
+    const user = await User.findOne({ email: decoded.email });
+    if (!user) return res.status(401).json({ error: 'Unauthorized' });
+    const order = await Order.findById(id);
+    if (!order) return res.status(404).json({ error: 'Order not found' });
+    // Only allow admin or the user who placed the order
+    if (user.role !== 'admin' && order.user !== decoded.email) {
+      return res.status(403).json({ error: 'Forbidden' });
+    }
+    res.json(order);
+  } catch (e) {
+    res.status(401).json({ error: 'Unauthorized' });
   }
 });
 
